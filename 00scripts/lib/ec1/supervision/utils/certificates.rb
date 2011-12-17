@@ -3,8 +3,8 @@
 
 module Ec1 module Admins module Utils module Security
 class Certificates
-require 'ec1/users/toolkit/standard.rb'
-include Ec1::Users::Toolkit::Standard
+require 'ec1/lib/toolkit/standard.rb'
+include Ec1::Lib::Toolkit::Standard
   def create(path, name, passphrase_code, passphrase=nil)
     abort "path unavailable: #{path}" unless File.directory?(path)
     certificate_path = File.join(path, name)

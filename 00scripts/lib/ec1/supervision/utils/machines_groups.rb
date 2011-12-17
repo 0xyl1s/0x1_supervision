@@ -4,8 +4,8 @@
 module Ec1 module Admins module Utils module Machines
 
 class Groups
-require 'ec1/users/toolkit/standard.rb'
-include Ec1::Users::Toolkit::Standard
+require 'ec1/lib/toolkit/standard.rb'
+include Ec1::Lib::Toolkit::Standard
   def initialize()
     @machine_group_file = '/etc/group'
     @machine_groups_raw = ec1__file_readlines(@machine_group_file)
