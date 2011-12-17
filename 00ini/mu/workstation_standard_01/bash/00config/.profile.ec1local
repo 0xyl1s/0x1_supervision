@@ -1,0 +1,5 @@
+
+source ~/.ec1/00mu/00sourcing/ec1_distrib/00shells/configs/ub11.04/x86_64/00combos/interactive_login/standard_01/shell_combo_interactive_login
+source ~/.ec1/00mu/00sourcing/ec1_distrib/bash/4.x/configs/ub11.04/x86_64/00combos/interactive_login/standard_01/bash_combo_interactive_login
+
+# vim: ft=sh

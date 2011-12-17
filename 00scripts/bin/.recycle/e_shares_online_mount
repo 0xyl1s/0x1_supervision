@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+ssh-add /home/$(cat /root/.ec1/00data/mainuser)/.ssh/id_rsa;
+source $HOME/.ec1/mount/00online/sshfs_online_shares
+for j in $i; do echo "mounting $j"; mount $j; done

@@ -1,0 +1,5 @@
+".pentadactylrc.ec1local
+
+source! ~/.ec1/00mu/00sourcing/c1p_distrib/pentadactyl/1.x/configs/ub11.04/x86_64/.pentadactylrc/c1p_standard_01/.pentadactylrc
+
+" vim: set ft=javascript:

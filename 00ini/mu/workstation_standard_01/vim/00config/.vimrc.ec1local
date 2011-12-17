@@ -1,0 +1,5 @@
+".vimrc.ec1local
+
+source ~/.ec1/00mu/00sourcing/c1p_distrib/vim/7.x/configs/ub11.04/x86_64/.vimrc_extension_01/.vimrc
+
+" vim: ft=vim

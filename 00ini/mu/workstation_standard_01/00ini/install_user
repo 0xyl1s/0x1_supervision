@@ -1,0 +1,65 @@
+
+________________________________________________________________________________
+
+#ssh
+mkdir ~/.ssh;
+chmod 700 ~/.ssh;
+ln -s ~/.ec1/ssh/00livelinks/config/config ~/.ssh/;
+ln -s ~/.ec1/ssh/00livelinks/authorized_keys/authorized_keys ~/.ssh/;
+ln -s ~/.ec1/ssh/00certificates/id_rsa ~/.ssh/
+ln -s ~/.ec1/ssh/00certificates/id_rsa.pub ~/.ssh/id_rsa.pub
+#bash
+mv ~/.bashrc ~/.ec1/bash/00livelinks/.bashrc/.bashrc_00ori;
+ln -s ~/.ec1/bash/00livelinks/.bashrc/.bashrc ~/;
+mv ~/.bash_history ~/.ec1/bash/00livelinks/.bash_history/;
+ln -s ~/.ec1/bash/00livelinks/.bash_history/.bash_history ~/;
+mv ~/.profile ~/.ec1/bash/00livelinks/.profile/.profile_00ori;
+ln -s ~/.ec1/bash/00livelinks/.profile/.profile ~/;
+#screen
+ln -s ~/.ec1/screen/00livelinks/.screenrc/.screenrc ~/;
+#mc
+mkdir ~/.mc/;
+ln -s ~/.ec1/mc/00livelinks/ini/ini ~/.mc/;
+ln -s ~/.ec1/mc/00livelinks/bindings/bindings ~/.mc/;
+#vim
+ln -s ~/.ec1/vim/00livelinks/.vim/.vim/ ~/;
+ln -s ~/.ec1/vim/00livelinks/.vimrc/.vimrc ~/;
+ln -s ~/.ec1/vim/00livelinks/.gvimrc/.gvimrc ~/;
+#git
+ln -s ~/.ec1/git/00livelinks/.gitconfig/.gitconfig ~/;
+#x11
+ln -s ~/.ec1/x11/00livelinks/.xsession/.xsession ~/;
+ln -s ~/.ec1/x11/00livelinks/.Xresources/.Xresources ~/;
+#fluxbox
+mkdir ~/.fluxbox;
+ln -s ~/.ec1/fluxbox/00livelinks/styles/styles ~/.fluxbox/;
+ln -s ~/.ec1/fluxbox/00livelinks/init/init ~/.fluxbox/;
+ln -s ~/.ec1/fluxbox/00livelinks/startup/startup ~/.fluxbox/;
+ln -s ~/.ec1/fluxbox/00livelinks/menu/menu ~/.fluxbox/;
+ln -s ~/.ec1/fluxbox/00livelinks/keys/keys ~/.fluxbox/;
+#bbpager
+mkdir ~/.bbtools;
+ln -s ~/.ec1/bbtools/00livelinks/bbpager.rc/bbpager.rc ~/.bbtools/;
+#xxkb
+ln -s ~/.ec1/xxkb/00livelinks/.xxkbrc/.xxkbrc ~/;
+#rvm
+ln -s ~/.ec1/rvm/00livelinks/.rvmrc/.rvmrc ~/
+exit;
+________________________________________________________________________________
+
+
+bash < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
+exit;
+
+rvm pkg install readline;
+rvm pkg install zlib;
+rvm install 1.8.7 --with-zlib-dir=$rvm_path/usr --with-readline-dir=$rvm_path/usr;
+rvm use 1.8.7 --default;
+rvm install 1.9.3 --with-zlib-dir=$rvm_path/usr --with-readline-dir=$rvm_path/usr;
+rvm use 1.9.3 --default;
+exit;
+
+________________________________________________________________________________
+
+
+

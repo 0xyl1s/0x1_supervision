@@ -1,0 +1,9 @@
+
+source ~/.ec1/00mu/00sourcing/ec1_distrib/00shells/configs/ub11.04/x86_64/00combos/interactive_nonlogin/standard_01/shell_combo_interactive_nonlogin
+source ~/.ec1/00mu/00sourcing/ec1_distrib/bash/4.x/configs/ub11.04/x86_64/00combos/interactive_nonlogin/standard_01/bash_combo_interactive_nonlogin
+
+alias e_vnc='vncserver :4 -geometry 1920x1080 -depth 24 -dpi 100'
+alias e_vnc_restart='vncserver -kill :4 ; vncserver :4 -geometry 1920x1080 -depth 24 -dpi 100'
+alias e_vnc_stop='vncserver -kill :4'
+
+# vim: ft=sh

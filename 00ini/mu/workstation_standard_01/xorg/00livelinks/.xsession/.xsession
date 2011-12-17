@@ -1,0 +1,1 @@
+../../../00sourcing/ec1_distrib/xorg/7.x/configs/ub11.04/x86_64/.xsession/standard_01/.xsession
