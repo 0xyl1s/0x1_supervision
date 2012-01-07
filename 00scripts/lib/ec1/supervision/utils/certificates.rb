@@ -1,27 +1,30 @@
 # encoding: utf-8
-# tested with ruby 1.9.2
+# tested with ruby 1.9.3
 
 module Ec1 module Admins module Utils module Security
+
 class Certificates
 require 'ec1/lib/toolkit/standard.rb'
 include Ec1::Lib::Toolkit::Standard
-  def create(path, name, passphrase_code, passphrase=nil)
-    abort "path unavailable: #{path}" unless File.directory?(path)
-    certificate_path = File.join(path, name)
-    abort "certificate file exists already: #{certificate_path}" if File.exist?(certificate_path)
-    certificate_passphrase_code_path = "#{certificate_path}.pass"
-    abort "certificate_pass file exists already: #{certificate_passphrase_code_path}" if File.exist?(certificate_passphrase_code_path)
-    command = "ssh-keygen -f #{certificate_path} -C #{name}"
-    command << " -P #{passphrase}" unless passphrase.nil?
-    system("#{command}")
-    abort "Error creating certificate file #{certificate_path}" unless File.exist?(certificate_path)
-    ec1__file_save_nl(passphrase_code, certificate_passphrase_code_path)
-    abort "Error creating certificate_passcode file: #{certificate_passphrase_code_path}" unless File.exist?(certificate_passphrase_code_path)
-  end
+
+def create(path, name, passphrase_code, passphrase=nil)
+  puts e__datetime
+  abort
+  abort "path unavailable: #{path}" unless File.directory?(path)
+  certificate_path = File.join(path, name)
+  abort "certificate file exists already: #{certificate_path}" if File.exist?(certificate_path)
+  certificate_passphrase_code_path = "#{certificate_path}.pass"
+  abort "certificate_pass file exists already: #{certificate_passphrase_code_path}" if File.exist?(certificate_passphrase_code_path)
+  command = "ssh-keygen -f #{certificate_path} -C #{name}"
+  command << " -P #{passphrase}" unless passphrase.nil?
+  system("#{command}")
+  abort "Error creating certificate file #{certificate_path}" unless File.exist?(certificate_path)
+  ec1__file_save_nl(passphrase_code, certificate_passphrase_code_path)
+  abort "Error creating certificate_passcode file: #{certificate_passphrase_code_path}" unless File.exist?(certificate_passphrase_code_path)
 end
-def ec1__admins_lib
-  puts "ok ec1_admins_lib"
+
 end
+
 end end end end
 
 
