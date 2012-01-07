@@ -22,7 +22,6 @@ def create(path, name, passphrase_code, default_cert_file_option, passphrase=nil
   else
     abort "ERROR: default_cert_file_option must be either -c (create) or -b (bypass) (currently set as: #{default_cert_file_option})"
   end
-  #puts "certificate_passphrase_code_path = #{certificate_passphrase_code_path}"
   command = "ssh-keygen -f #{certificate_path} -C #{name}"
   command << " -P #{passphrase}" unless passphrase.nil?
   system("#{command}")
