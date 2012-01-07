@@ -29,7 +29,7 @@ def create(path, name, passphrase_code, default_cert_file_option, passphrase=nil
   abort "Error creating certificate file #{certificate_path}" unless e__is_a_file?(certificate_path)
   e__file_save_nl(passphrase_code, certificate_passphrase_code_path)
   abort "Error creating certificate_passcode file: #{certificate_passphrase_code_path}" unless e__is_a_file?(certificate_passphrase_code_path)
-  e__file_save(name, default_cert_file)
+  e__file_save_nl(name, default_cert_file)
   abort "Error creating default_cert_file file: #{default_cert_file}" unless e__is_a_file?(default_cert_file)
 end
 
