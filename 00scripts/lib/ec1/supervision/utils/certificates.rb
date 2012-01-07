@@ -8,8 +8,6 @@ require 'ec1/lib/toolkit/standard.rb'
 include Ec1::Lib::Toolkit::Standard
 
 def create(path, name, passphrase_code, passphrase=nil)
-  puts e__datetime
-  abort
   abort "path unavailable: #{path}" unless File.directory?(path)
   certificate_path = File.join(path, name)
   abort "certificate file exists already: #{certificate_path}" if File.exist?(certificate_path)
