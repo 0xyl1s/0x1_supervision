@@ -16,7 +16,7 @@ def create(path, name, passphrase_code, default_cert_file_option, passphrase=nil
   abort "ERROR: the mandatory format for passphrase_code is [nnnn] (4 numbers enclosed in brackets) : #{passphrase_code}" unless "#{passphrase_code}" =~ /^\[[0-9]{4}\]$/
   case default_cert_file_option
   when '-c'
-    default_cert_file="#{path}/ec1_user.openssh.default_certificate"
+    default_cert_file="#{path}/ec1_user.openssh.defcert"
   when '-b'
     echo "INFO: bypassing default_cert_file creation"
   else
