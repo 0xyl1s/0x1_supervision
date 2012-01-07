@@ -3,7 +3,7 @@
 # tested with ruby 1.9.2
 
 module Ec1 module Admins module Utils module Security
-require 'ec1/admins/utils/certificates.rb'
+require 'ec1/supervision/utils/certificates.rb'
 
 USAGE = <<-heredoc
 \n============================================================
