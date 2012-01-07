@@ -8,17 +8,23 @@ require 'ec1/lib/toolkit/standard.rb'
 include Ec1::Lib::Toolkit::Standard
 
 def create(path, name, passphrase_code, passphrase=nil)
-  abort "path unavailable: #{path}" unless File.directory?(path)
+  abort "path unavailable: #{path}" unless e__is_a_dir?(path)
   certificate_path = File.join(path, name)
-  abort "certificate file exists already: #{certificate_path}" if File.exist?(certificate_path)
+  abort "certificate file exists already: #{certificate_path}" if e__is_a_file?(certificate_path)
   certificate_passphrase_code_path = "#{certificate_path}.pass"
-  abort "certificate_pass file exists already: #{certificate_passphrase_code_path}" if File.exist?(certificate_passphrase_code_path)
+  abort "certificate_pass file exists already: #{certificate_passphrase_code_path}" if e__is_a_file?(certificate_passphrase_code_path)
+
+  puts "certificate_path = #{certificate_path}"
+  puts "certificate_passphrase_code_path = #{certificate_passphrase_code_path}"
+  abort
+
+
   command = "ssh-keygen -f #{certificate_path} -C #{name}"
   command << " -P #{passphrase}" unless passphrase.nil?
   system("#{command}")
-  abort "Error creating certificate file #{certificate_path}" unless File.exist?(certificate_path)
+  abort "Error creating certificate file #{certificate_path}" unless e__is_a_file?(certificate_path)
   ec1__file_save_nl(passphrase_code, certificate_passphrase_code_path)
-  abort "Error creating certificate_passcode file: #{certificate_passphrase_code_path}" unless File.exist?(certificate_passphrase_code_path)
+  abort "Error creating certificate_passcode file: #{certificate_passphrase_code_path}" unless e__is_a_file?(certificate_passphrase_code_path)
 end
 
 end
