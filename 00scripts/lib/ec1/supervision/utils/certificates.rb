@@ -13,11 +13,14 @@ def create(path, name, passphrase_code, passphrase=nil)
   abort "certificate file exists already: #{certificate_path}" if e__is_a_file?(certificate_path)
   certificate_passphrase_code_path = "#{certificate_path}.pass"
   abort "certificate_pass file exists already: #{certificate_passphrase_code_path}" if e__is_a_file?(certificate_passphrase_code_path)
+  puts "certificate_passphrase_code_path = #{certificate_passphrase_code_path}"
+  puts "passphrase_code = #{passphrase_code}"
+  abort
   command = "ssh-keygen -f #{certificate_path} -C #{name}"
   command << " -P #{passphrase}" unless passphrase.nil?
   system("#{command}")
   abort "Error creating certificate file #{certificate_path}" unless e__is_a_file?(certificate_path)
-  ec1__file_save_nl(passphrase_code, certificate_passphrase_code_path)
+  e__file_save_nl(passphrase_code, certificate_passphrase_code_path)
   abort "Error creating certificate_passcode file: #{certificate_passphrase_code_path}" unless e__is_a_file?(certificate_passphrase_code_path)
 end
 
