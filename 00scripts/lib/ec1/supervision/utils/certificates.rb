@@ -7,14 +7,21 @@ class Certificates
 require 'ec1/lib/toolkit/standard.rb'
 include Ec1::Lib::Toolkit::Standard
 
-def create(path, name, passphrase_code, passphrase=nil)
+def create(path, name, passphrase_code, default_cert_file_option, passphrase=nil)
   abort "path unavailable: #{path}" unless e__is_a_dir?(path)
   certificate_path = File.join(path, name)
   abort "certificate file exists already: #{certificate_path}" if e__is_a_file?(certificate_path)
   certificate_passphrase_code_path = "#{certificate_path}.pass"
   abort "certificate_pass file exists already: #{certificate_passphrase_code_path}" if e__is_a_file?(certificate_passphrase_code_path)
   abort "ERROR: the mandatory format for passphrase_code is [nnnn] (4 numbers enclosed in brackets) : #{passphrase_code}" unless certificate_passphrase_code_path =~ /^\[[0-9]{4}\]$/
-  abort
+  case default_cert_file_option
+  when '-c'
+    default_cert_file="#{path}/ec1_user.openssh.default_certificate"
+  when '-b'
+    echo "INFO: bypassing default_cert_file creation"
+  else
+    abort "ERROR: default_cert_file_option must be either -c (create) or -b (bypass) (currently set as: #{default_cert_file_option})"
+  end
   #puts "certificate_passphrase_code_path = #{certificate_passphrase_code_path}"
   command = "ssh-keygen -f #{certificate_path} -C #{name}"
   command << " -P #{passphrase}" unless passphrase.nil?
@@ -22,6 +29,8 @@ def create(path, name, passphrase_code, passphrase=nil)
   abort "Error creating certificate file #{certificate_path}" unless e__is_a_file?(certificate_path)
   e__file_save_nl(passphrase_code, certificate_passphrase_code_path)
   abort "Error creating certificate_passcode file: #{certificate_passphrase_code_path}" unless e__is_a_file?(certificate_passphrase_code_path)
+  e__file_save(name, default_cert_file)
+  abort "Error creating default_cert_file file: #{default_cert_file}" unless e__is_a_file?(default_cert_file)
 end
 
 end

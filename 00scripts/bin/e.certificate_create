@@ -12,7 +12,9 @@ USAGE = <<-heredoc
 Certificates allows the creation of RSA certificates.
 
 Usage :
-e_certificates_create path name pass_code [pass]
+e_certificates_create path name pass_code -c|-b [pass]
+
+default_cert_file_option is either -c (create) or -b (bypass)
 
 ============================================================\n
 heredoc
