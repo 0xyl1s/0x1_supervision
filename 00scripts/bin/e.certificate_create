@@ -17,10 +17,6 @@ e_certificates_create path name pass_code [pass]
 ============================================================\n
 heredoc
 
-
-puts "1"
-abort
-
 abort "#{USAGE}" if ARGV.size < 3
 
 case ARGV[0]
