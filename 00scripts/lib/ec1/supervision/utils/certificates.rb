@@ -1,7 +1,7 @@
 # encoding: utf-8
 # tested with ruby 1.9.3
 
-module Ec1 module Admins module Utils module Security
+module Ec1 module Supervision module Utils module Security
 
 class Certificates
 require 'ec1/lib/toolkit/standard.rb'

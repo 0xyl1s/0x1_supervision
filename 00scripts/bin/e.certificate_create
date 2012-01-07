@@ -2,12 +2,12 @@
 # encoding: utf-8
 # tested with ruby 1.9.3
 
-module Ec1 module Admins module Utils module Security
+module Ec1 module Supervision module Utils module Security
 require 'ec1/supervision/utils/certificates.rb'
 
 USAGE = <<-heredoc
 \n============================================================
-==   Ec1_users - Utils > Security - Certificates          ==
+==   Ec1 > Supervision > Utils > Security - Certificates          ==
 ============================================================
 Certificates allows the creation of RSA certificates.
 
