@@ -16,9 +16,9 @@ def create(path, name, passphrase_code, default_cert_file_option, passphrase=nil
   abort "ERROR: the mandatory format for passphrase_code is [nnnn] (4 numbers enclosed in brackets) : #{passphrase_code}" unless "#{passphrase_code}" =~ /^\[[0-9]{4}\]$/
   case default_cert_file_option
   when '-c'
-    default_cert_file="#{path}/ec1_user.openssh.defcert"
+    openssh_defcert_file="#{path}/user.openssh_defcert"
   when '-b'
-    echo "INFO: bypassing default_cert_file creation"
+    echo "INFO: bypassing openssh_defcert_file creation"
   else
     abort "ERROR: default_cert_file_option must be either -c (create) or -b (bypass) (currently set as: #{default_cert_file_option})"
   end
@@ -28,8 +28,8 @@ def create(path, name, passphrase_code, default_cert_file_option, passphrase=nil
   abort "Error creating certificate file #{certificate_path}" unless e__is_a_file?(certificate_path)
   e__file_save_nl(passphrase_code, certificate_passphrase_code_path)
   abort "Error creating certificate_passcode file: #{certificate_passphrase_code_path}" unless e__is_a_file?(certificate_passphrase_code_path)
-  e__file_save_nl(name, default_cert_file)
-  abort "Error creating default_cert_file file: #{default_cert_file}" unless e__is_a_file?(default_cert_file)
+  e__file_save_nl(name, openssh_defcert_file)
+  abort "Error creating openssh_defcert_file file: #{openssh_defcert_file}" unless e__is_a_file?(openssh_defcert_file)
 end
 
 end
