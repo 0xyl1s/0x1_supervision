@@ -96,7 +96,12 @@ def dispatch_ini_ering_data()
                                                     :dummy_text_replace => '@@_ec1_machine_ssh_port_@@',
                                                     :file_relative_path => 'dispatch/system/00data/machine.ssh_port'
                                                     }
-  puts imported_ini_ering_data[:ec1_machine_ssh_port][:import_value]
+  imported_ini_ering_data[:ec1_entity_domain] = {
+                                                    :import_value => EC1_ENTITY_DOMAIN,
+                                                    :dummy_text_replace => '@@_ec1_entity_domain_@@',
+                                                    :file_relative_path => 'dispatch/system/00data/entity.domain'
+                                                    }
+  puts imported_ini_ering_data[:ec1_entity_domain][:import_value]
   imported_ini_ering_data.each_pair do |ini_ering, ering_data|
     import_value = ering_data[:import_value]
     puts import_value
