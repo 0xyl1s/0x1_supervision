@@ -43,7 +43,7 @@ end
 
 private
 
-def download_raw_install_ini_dir()
+def download_raw_install_ini_dir(@supervision_new_cluster_ini_basedir)
   ini_dir_archive_uri = "https://raw.github.com/epiculture/ec1_supervision_templates/master/#{@os}/erings/#{@cluster_type}/ini_ering_templates/variation_01/.ec1.ini.ering.tar"
   e__http_download_and_save(ini_dir_archive_uri, @supervision_new_cluster_ini_basedir)
   system "cd #{supervision_new_cluster_ini_basedir} ; tar xvf ./.ec1.ini.ering.tar"
