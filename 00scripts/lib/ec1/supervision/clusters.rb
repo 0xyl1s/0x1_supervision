@@ -93,11 +93,15 @@ def dispatch_ini_ering_data()
   ec1_machine_ssh_port = {
                          :import_value => EC1_MACHINE_SSH_PORT,
                          :dummy_text_replace => '@@_ec1_machine_ssh_port_@@',
-                         :file_relative_path => '...file...'
+                         :file_relative_path => 'dispatch/system/00data/machine.ssh_port'
                          }
   puts ec1_machine_ssh_port[:import_value]
   puts ec1_machine_ssh_port[:dummy_text_replace]
   puts ec1_machine_ssh_port[:file_relative_path]
+  processed_value = ec1_machine_ssh_port
+  puts processed_value.class
+  processed_value[:file_full_path] = File.join("#{@ec1_ini_ering_basedir}, #{processed_value[:file_relative_path]}")
+  puts processed_value[:file_full_path]
 end
 
 end
