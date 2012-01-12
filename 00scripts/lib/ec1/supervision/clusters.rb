@@ -103,13 +103,10 @@ def dispatch_ini_ering_data()
                                                     }
   imported_ini_ering_data.each_pair do |ini_ering, ering_data|
     import_value = ering_data[:import_value]
-    puts import_value
     dummy_text_replace = ering_data[:dummy_text_replace]
-    puts dummy_text_replace
     file_relative_path = ering_data[:file_relative_path]
-    puts file_relative_path
-    #file_full_path = File.join(@ec1_ini_ering_basedir, file_relative_path)
-    #puts "file #{file_full_path} => replacing dummy content #{dummy_text_replace} by new content #{import_value}"
+    file_full_path = File.join(@ec1_ini_ering_basedir, file_relative_path)
+    puts "file #{file_full_path} => replacing dummy content #{dummy_text_replace} by new content #{import_value}"
     #e__file_overwrite(ini_ering[ering_data[:import_value], ini_ering[ering_data[:file_full_path])
   end
 end
