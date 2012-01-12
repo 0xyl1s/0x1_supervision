@@ -1,0 +1,44 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
+# tested with ruby 1.9.3
+
+module Ec1 module Supervision module Clusters
+require_relative "../lib/ec1/supervision/clusters.rb"
+
+# TODO: usage writing completion
+USAGE = <<-heredoc
+\n============================================================
+==   Ec1 > Supervision > Clusters > Installs          ==
+============================================================
+
+usage:
+e.cluster_install_ering.cc01_ini
+
+ering types:
+ - cluster.core
+    - cc01
+ - cluster.leaf
+
+============================================================\n
+heredoc
+
+
+case ARGV[0]
+when '--help', '-h'
+  abort "#{USAGE}"
+else
+  ClusterIniPhase2.new()
+end
+
+end end end
+
+
+# ____________________________________________________________________
+# >>>>>  projet epiculture/ec1   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#{{{
+# Sources, Infos & Contact : http://www.epiculture.org
+# Author: Pierre-Maël Crétinon
+# License: GNU GPLv3 ( www.epiculture.org/ec1/LICENSE )
+# Copyright: 2010-2012 Pierre-Maël Crétinon
+# Sponsor: studio Helianova - http://studio.helianova.com
+# ――――――――――――――――――――――――――――――――――――――#}}}
+# vim: ft=ruby
