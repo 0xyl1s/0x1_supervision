@@ -2,30 +2,32 @@
 # encoding: utf-8
 # tested with ruby 1.9.3
 
-module Ec1 module Supervision module Security
-require 'ec1/supervision/certificates.rb'
+module Ec1 module Supervision module Clusters
+require 'ec1/supervision/utils/certificates.rb'
 
+# TODO: usage writing completion
 USAGE = <<-heredoc
 \n============================================================
-==   Ec1 > Supervision > Security - Certificates          ==
+==   Ec1 > Supervision > Clusters > Installs          ==
 ============================================================
-Certificates allows the creation of RSA certificates.
 
-Usage :
-e_certificates_create path name pass_code -c|-b [pass]
+usage:
+e.cluster_install_ering.cc01_ini
 
-default_cert_file_option is either -c (create) or -b (bypass)
+ering types:
+ - cluster.core
+    - cc01
+ - cluster.leaf
 
 ============================================================\n
 heredoc
 
-abort "#{USAGE}" if ARGV.size < 4
 
 case ARGV[0]
 when 'help', '-h', nil
   abort "#{USAGE}"
 else
-  Certificates.new.create(*ARGV)
+  Clusters.new('ub10.04_x86_64', 'cluster.core', '01').install
 end
 
 end end end
