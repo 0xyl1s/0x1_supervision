@@ -24,7 +24,7 @@ heredoc
 
 
 case ARGV[0]
-when 'help', '-h', nil
+when '--help', '-h'
   abort "#{USAGE}"
 else
   Clusters.new('ub10.04_x86_64', 'cluster.core', '01').install
