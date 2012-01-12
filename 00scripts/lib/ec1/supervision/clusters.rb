@@ -97,7 +97,7 @@ def dispatch_ini_ering_data()
                                                     :file_relative_path => 'dispatch/system/00data/machine.ssh_port'
                                                     }
                              }
-  imported_ini_ering_data.each_pair do |ini_ering, ini_ering_data|
+  imported_ini_ering_data.each_pair do |ini_ering, ering_data|
     import_value = ini_ering[ering_data[:import_value]]
     dummy_text_replace = ini_ering[ering_data[:dummy_text_replace]]
     file_relative_path = ini_ering[ering_data[:file_relative_path]]
