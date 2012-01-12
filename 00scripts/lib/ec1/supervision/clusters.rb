@@ -115,47 +115,47 @@ def dispatch_ini_ering_data()
   imported_ini_ering_data[:ec1_machine_hostname] = {
                                                     :import_value => EC1_MACHINE_HOSTNAME,
                                                     :dummy_text_replace => '@@_ec1_machine_hostname_@@',
-                                                    :file_relative_path => ''
+                                                    :file_relative_path => 'dispatch/system/00data/machine.hostname'
                                                    }
   imported_ini_ering_data[:ec1_root_name] = {
                                              :import_value => EC1_ROOT_NAME,
                                              :dummy_text_replace => '@@_ec1_root_name_@@',
-                                             :file_relative_path => ''
+                                             :file_relative_path => 'dispatch/root/00data/user.name'
                                             }
   imported_ini_ering_data[:ec1_root_password] = {
                                              :import_value => EC1_ROOT_PASSWORD,
                                              :dummy_text_replace => '@@_ec1_root_password_@@',
-                                             :file_relative_path => ''
+                                             :file_relative_path => 'dispatch/root/00data/user.password'
                                             }
   imported_ini_ering_data[:ec1_mainuser_name] = {
                                              :import_value => EC1_MAINUSER_NAME,
                                              :dummy_text_replace => '@@_ec1_mainuser_name_@@',
-                                             :file_relative_path => ''
+                                             :file_relative_path => 'dispatch/mainuser/00data/user.name'
                                             }
   imported_ini_ering_data[:ec1_mainuser_uid] = {
                                              :import_value => EC1_MAINUSER_UID,
                                              :dummy_text_replace => '@@_ec1_mainuser_uid_@@',
-                                             :file_relative_path => ''
+                                             :file_relative_path => 'dispatch/mainuser/00data/user.uid'
                                             }
   imported_ini_ering_data[:ec1_mainuser_gid] = {
                                              :import_value => EC1_MAINUSER_GID,
                                              :dummy_text_replace => '@@_ec1_mainuser_gid_@@',
-                                             :file_relative_path => ''
+                                             :file_relative_path => 'dispatch/mainuser/00data/user.gid'
                                             }
   imported_ini_ering_data[:ec1_mainuser_email] = {
                                              :import_value => EC1_MAINUSER_EMAIL,
                                              :dummy_text_replace => '@@_ec1_mainuser_email_@@',
-                                             :file_relative_path => ''
+                                             :file_relative_path => 'dispatch/mainuser/00data/user.email'
                                             }
   imported_ini_ering_data[:ec1_mainuser_password] = {
                                              :import_value => EC1_MAINUSER_PASSWORD,
                                              :dummy_text_replace => '@@_ec1_mainuser_password_@@',
-                                             :file_relative_path => ''
+                                             :file_relative_path => 'dispatch/mainuser/00data/user.password'
                                             }
   imported_ini_ering_data[:ec1_mainuser_authorized_keys] = {
                                              :import_value => EC1_MAINUSER_AUTHORIZED_KEYS,
                                              :dummy_text_replace => '@@_ec1_mainuser_authorized_keys_@@',
-                                             :file_relative_path => ''
+                                             :file_relative_path => 'dispatch/mainuser/00certificates/authorized_keys'
                                             }
 
   imported_ini_ering_data.each_pair do |ini_ering, ering_data|
