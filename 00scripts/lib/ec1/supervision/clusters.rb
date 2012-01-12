@@ -32,7 +32,7 @@ def install(os, cluster_type, ering_version)
   @cluster_type = cluster_type if valid_cluster_type?(cluster_type)
   @cluster_type_shortname = cluster_type_shortname(@cluster_type)
   @supervision_new_cluster_ini_basedir = File.expand_path("~/.ec1.sup/cluster.new")
-  abort "ERROR: when starting new cluster installation, supervision_new_cluster_ini_basedir should be empty (#{@supervision_new_cluster_ini_basedir})"
+  abort "ERROR: when starting new cluster installation, supervision_new_cluster_ini_basedir should be empty (#{@supervision_new_cluster_ini_basedir})" unless e__dir_is_empty?(@supervision_new_cluster_ini_basedir)
   @ering_version = ering_version
 end
 
