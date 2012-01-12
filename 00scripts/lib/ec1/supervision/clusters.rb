@@ -105,14 +105,17 @@ def dispatch_ini_ering_data()
     import_value = ering_data[:import_value]
     dummy_text_replace = ering_data[:dummy_text_replace]
     puts "dummy_text_replace = #{dummy_text_replace}"
+
     file_relative_path = ering_data[:file_relative_path]
     file_full_path = File.join(@ec1_ini_ering_basedir, file_relative_path)
     abort "ERROR: can't access file #{file_full_path}" unless e__is_a_file?(file_full_path)
     file_original_content = e__file_read(file_full_path)
     puts "file_original_content = #{file_original_content}"
     puts "import_value = #{import_value}"
-    new_content = file_original_content.sub!(/#{dummy_text_replace}/, import_value)
-    #puts "file #{file_full_path} => replacing dummy content #{dummy_text_replace} by new content #{import_value}"
+    text_replace_regex = Regex.new("#{dummy_text_replace}")
+    puts "text_replace_regex = #{text_replace_regex}"
+    puts text_replace_regex.class
+    new_content = file_original_content.sub!(text_replace_regex, import_value)
     puts "new_content = #{new_content}"
     puts "file_full_path = #{file_full_path}"
     e__file_overwrite(new_content, file_full_path)
