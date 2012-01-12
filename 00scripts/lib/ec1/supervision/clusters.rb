@@ -27,7 +27,7 @@ include Ec1::Lib::Toolkit::Online
 def initialize(os, cluster_type, ering_version)
   @ec1_supervision_new_cluster_basedir = File.expand_path("~/.ec1.sup/cluster.new")
   @ec1_ini_ering_basedir = "#{@ec1_supervision_new_cluster_basedir}/.ec1.ini.ering"
-  @ec1_ini_ering_data_filepath = "#{@ec1_ini_ering_basedir}/.ec1.ini.ering.data"
+  @ec1_ini_ering_data_filepath = "#{@ec1_ini_ering_basedir}/.ec1.ini.ering.data.rb"
 end
 
 end
