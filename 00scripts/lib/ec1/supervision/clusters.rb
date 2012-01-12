@@ -86,7 +86,7 @@ class ClusterIniPhase2 < ClusterIni
 def initialize(os, cluster_type, ering_version)
   super
   require @ec1_ini_ering_data_filepath
-  puts bou
+  puts EC1_MACHINE_SSH_PORT
 end
 
 end
