@@ -44,11 +44,10 @@ end
 private
 
 def download_raw_install_ini_dir()
-  puts @supervision_new_cluster_ini_basedir
   abort
   ini_dir_archive_uri = "https://raw.github.com/epiculture/ec1_supervision_templates/master/#{@os}/erings/#{@cluster_type}/ini_ering_templates/variation_01/.ec1.ini.ering.tar"
   e__http_download_and_save(ini_dir_archive_uri, @supervision_new_cluster_ini_basedir)
-  system "cd #{supervision_new_cluster_ini_basedir} ; tar xvf ./.ec1.ini.ering.tar"
+  system "cd #{@supervision_new_cluster_ini_basedir} ; tar xvf ./.ec1.ini.ering.tar"
   abort "ERROR: can't access @ec1_ini_ering_basedir (#{@ec1_ini_ering_basedir}"
   ering_uri = "https://raw.github.com/epiculture/ec1_supervision_templates/master/#{@os}/erings/#{@cluster_type}/ering.#{@cluster_type_shortname}#{@ering_version}"
   e__http_download_and_save(ering_uri, @ec1_ini_ering_basedir)
