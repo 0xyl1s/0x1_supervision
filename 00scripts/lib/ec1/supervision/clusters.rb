@@ -100,7 +100,7 @@ def dispatch_ini_ering_data()
   puts ec1_machine_ssh_port[:file_relative_path]
   processed_value = ec1_machine_ssh_port
   puts processed_value.class
-  processed_value[:file_full_path] = File.join("#{@ec1_ini_ering_basedir}, #{processed_value[:file_relative_path]}")
+  processed_value[:file_full_path] = File.join(@ec1_ini_ering_basedir, processed_value[:file_relative_path])
   puts processed_value[:file_full_path]
 end
 
