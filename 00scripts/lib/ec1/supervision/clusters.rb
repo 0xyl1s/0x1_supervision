@@ -113,7 +113,7 @@ def dispatch_ini_ering_data()
                                                     :file_relative_path => 'dispatch/system/00data/entity.domain'
                                                     }
   imported_ini_ering_data[:ec1_machine_hostname] = {
-                                                    :import_value => EC1_MACHINE_HOSTNAME
+                                                    :import_value => EC1_MACHINE_HOSTNAME,
                                                     :dummy_text_replace => '@@_ec1_machine_hostname_@@',
                                                     :file_relative_path => ''
                                                    }
