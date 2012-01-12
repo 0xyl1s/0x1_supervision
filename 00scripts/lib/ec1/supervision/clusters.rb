@@ -45,7 +45,7 @@ def initialize(os, cluster_type, ering_version)
   @ering_version = ering_version
   download_raw_install_ini_dir
   puts "\n\nec1.cluster_ini_phase1 completed. When datafile completed\n#{@ec1_ini_ering_data_filepath}\n, please run\n\ne.cluster_ini_ering.cc01.phase2\n\n"
-  system "e #{ec1_ini_ering_data_filepath}"
+  system "e #{@ec1_ini_ering_data_filepath}"
 end
 
 
