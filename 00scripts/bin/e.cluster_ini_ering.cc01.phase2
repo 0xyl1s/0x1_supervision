@@ -27,7 +27,7 @@ case ARGV[0]
 when '--help', '-h'
   abort "#{USAGE}"
 else
-  ClusterIniPhase2.new()
+  ClusterIniPhase2.new('ub10.04_x86_64', 'cluster.core', '01')
 end
 
 end end end
