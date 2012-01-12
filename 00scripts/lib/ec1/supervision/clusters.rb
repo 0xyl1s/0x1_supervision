@@ -82,10 +82,10 @@ end
 end
 
 class ClusterIniPhase2 < ClusterIni
-require @ec1_ini_ering_data_filepath
 
 def initialize(os, cluster_type, ering_version)
   super
+  require @ec1_ini_ering_data_filepath
   puts bou
 end
 
