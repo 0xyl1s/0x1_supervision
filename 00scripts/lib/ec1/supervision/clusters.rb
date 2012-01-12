@@ -34,6 +34,7 @@ def install(os, cluster_type, ering_version)
   @cluster_type = cluster_type if valid_cluster_type?(cluster_type)
   @cluster_type_shortname = cluster_type_shortname(@cluster_type)
   @supervision_new_cluster_ini_basedir = File.expand_path("~/.ec1.sup/cluster.new")
+  @ec1_ini_ering_basedir = "#{@supervision_new_cluster_ini_basedir}/.ec1.ini.ering"
   abort "ERROR: when starting new cluster installation, supervision_new_cluster_ini_basedir should be empty (#{@supervision_new_cluster_ini_basedir})" unless e__dir_is_empty?(@supervision_new_cluster_ini_basedir)
   @ering_version = ering_version
   download_raw_install_ini_dir
@@ -43,11 +44,12 @@ end
 private
 
 def download_raw_install_ini_dir()
-  ering_uri = "https://raw.github.com/epiculture/ec1_supervision_templates/master/#{@os}/erings/#{@cluster_type}/ering.#{@cluster_type_shortname}#{@ering_version}"
-  puts ering_uri
-  e__http_download_and_save(ering_uri, @supervision_new_cluster_ini_basedir)
-  ini_dir_archive_uri = "https://raw.github.com/epiculture/ec1_supervision_templates/master/#{@os}/erings/#{@cluster_type}/ini_dir.ec1template.tar"
+  ini_dir_archive_uri = "https://raw.github.com/epiculture/ec1_supervision_templates/master/#{@os}/erings/#{@cluster_type}/ini_ering_templates/variation_01/.ec1.ini.ering.tar"
   e__http_download_and_save(ini_dir_archive_uri, @supervision_new_cluster_ini_basedir)
+  system "cd #{supervision_new_cluster_ini_basedir} ; tar xvf ./.ec1.ini.ering.tar"
+  abort "ERROR: can't access @ec1_ini_ering_basedir (#{@ec1_ini_ering_basedir}"
+  ering_uri = "https://raw.github.com/epiculture/ec1_supervision_templates/master/#{@os}/erings/#{@cluster_type}/ering.#{@cluster_type_shortname}#{@ering_version}"
+  e__http_download_and_save(ering_uri, @ec1_ini_ering_basedir)
 end
 
 def valid_os?(os)
