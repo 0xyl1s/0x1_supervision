@@ -86,9 +86,10 @@ class ClusterIniPhase2 < ClusterIni
 def initialize(os, cluster_type, ering_version)
   super
   require @ec1_ini_ering_data_filepath
+  dispatch_ini_ering_data
 end
 
-def dispatch_ini_ering_data
+def dispatch_ini_ering_data()
   ec1_machine_ssh_port = {
                          :import_value => EC1_MACHINE_SSH_PORT,
                          :dummy_text_replace => '@@_ec1_machine_ssh_port_@@',
