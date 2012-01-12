@@ -44,8 +44,6 @@ private
 
 def download_raw_install_ini_dir()
   ering_parsed_uri = e__parse_uri("https://raw.github.com/epiculture/ec1_supervision_templates/master/#{@os}/erings/#{@cluster_type}/ering.#{@cluster_type_shortname}#{@ering_version}")
-  puts e__http_response_code(ering_parsed_uri)
-  abort
   e__http_download_and_save(ering_uri, @supervision_new_cluster_ini_basedir)
   ini_dir_archive_uri = "https://raw.github.com/epiculture/ec1_supervision_templates/master/#{@os}/erings/#{@cluster_type}/ini_dir.ec1template.tar"
   e__http_download_and_save(ini_dir_archive_uri, @supervision_new_cluster_ini_basedir)
