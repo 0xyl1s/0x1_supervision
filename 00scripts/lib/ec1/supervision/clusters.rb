@@ -45,7 +45,7 @@ def initialize(os, cluster_type, ering_version)
   @ering_version = ering_version
   download_raw_install_ini_dir
   puts "\n\nec1.cluster_ini_phase1 completed. When datafile is filled #{@ec1_ini_ering_data_filepath}, please run\n\ne.cluster_ini_ering.cc01.phase2\n\n"
-  %x"e #{@ec1_ini_ering_data_filepath}"
+  #%x"e #{@ec1_ini_ering_data_filepath}"
 end
 
 
@@ -112,9 +112,9 @@ def dispatch_ini_ering_data()
     file_original_content = e__file_read(file_full_path)
     puts "file_original_content = #{file_original_content}"
     puts "import_value = #{import_value}"
-    text_replace_regex = Regexp.new("#{dummy_text_replace.chomp}")
+    text_replace_regex = Regexp.new("@@")
+    #text_replace_regex = Regexp.new("#{dummy_text_replace.chomp}")
     puts "text_replace_regex = #{text_replace_regex}"
-    puts text_replace_regex.class
     new_content = file_original_content.gsub!(text_replace_regex, import_value)
     puts "new_content = #{new_content}"
     puts "file_full_path = #{file_full_path}"
