@@ -111,7 +111,7 @@ def dispatch_ini_ering_data()
     file_original_content = e__file_read(file_full_path)
     puts "file_original_content = #{file_original_content}"
     puts "import_value = #{import_value}"
-    new_content = file_original_content.sub!(dummy_text_replace, import_value)
+    new_content = file_original_content.sub!(/#{dummy_text_replace}/, import_value)
     #puts "file #{file_full_path} => replacing dummy content #{dummy_text_replace} by new content #{import_value}"
     puts "new_content = #{new_content}"
     puts "file_full_path = #{file_full_path}"
