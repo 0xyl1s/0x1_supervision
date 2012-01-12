@@ -21,6 +21,8 @@ CLUSTER_TYPE_SHORTNAMES = {
 class Clusters
 require 'ec1/lib/toolkit/standard.rb'
 include Ec1::Lib::Toolkit::Standard
+require 'ec1/lib/toolkit/online.rb'
+include Ec1::Lib::Toolkit::Online
 
 def initialize()
 end
@@ -40,7 +42,7 @@ end
 
 private
 
-def download_raw_install_ini_dir
+def download_raw_install_ini_dir()
   ering_uri = "https://raw.github.com/epiculture/ec1_supervision_templates/master/#{@os}/erings/#{@cluster_type}/ering.#{@cluster_type_shortname}#{@ering_version}"
   e__http_download_and_save(ering_uri, @supervision_new_cluster_ini_basedir)
   ini_dir_archive_uri = "https://raw.github.com/epiculture/ec1_supervision_templates/master/#{@os}/erings/#{@cluster_type}/ini_dir.ec1template.tar"
