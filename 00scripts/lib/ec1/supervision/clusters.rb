@@ -45,7 +45,7 @@ def initialize(os, cluster_type, ering_version)
   @ering_version = ering_version
   download_raw_install_ini_dir
   puts "\n\nec1.cluster_ini_phase1 completed. When datafile is filled #{@ec1_ini_ering_data_filepath}, please run\n\ne.cluster_ini_ering.cc01.phase2\n\n"
-  system "e #{@ec1_ini_ering_data_filepath}"
+  %x"e #{@ec1_ini_ering_data_filepath}"
 end
 
 
@@ -56,7 +56,7 @@ def download_raw_install_ini_dir()
   ini_dir_archive_uri = "https://raw.github.com/epiculture/ec1_supervision_templates/master/#{@os}/erings/#{@cluster_type}/ini_ering_templates/variation_01/.ec1.ini.ering.tar"
   e__http_download_and_save(ini_dir_archive_uri, @ec1_supervision_new_cluster_basedir)
   # extracting ini dir tar archive
-  system "cd #{@ec1_supervision_new_cluster_basedir} ; tar xvf ./.ec1.ini.ering.tar"
+  %x"cd #{@ec1_supervision_new_cluster_basedir} ; tar xvf ./.ec1.ini.ering.tar"
   abort "ERROR: can't access @ec1_ini_ering_basedir (#{@ec1_ini_ering_basedir})" unless e__is_a_dir?(@ec1_ini_ering_basedir)
   e__file_move("#{@ec1_supervision_new_cluster_basedir}/.ec1.ini.ering.tar", "#{@ec1_ini_ering_basedir}/")
   # downloading ering_ini_file
@@ -86,7 +86,17 @@ class ClusterIniPhase2 < ClusterIni
 def initialize(os, cluster_type, ering_version)
   super
   require @ec1_ini_ering_data_filepath
-  puts EC1_MACHINE_SSH_PORT
+end
+
+def dispatch_ini_ering_data
+  ec1_machine_ssh_port = {
+                         :import_value => EC1_MACHINE_SSH_PORT,
+                         :dummy_text_replace => '@@_ec1_machine_ssh_port_@@'
+                         :file_relative_path => ''
+                         }
+  puts ec1_machine_ssh_port[:import_value]
+  puts ec1_machine_ssh_port[:dummy_text_replace]
+  puts ec1_machine_ssh_port[:file_relative_path]
 end
 
 end
