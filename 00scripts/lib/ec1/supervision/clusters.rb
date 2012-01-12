@@ -112,7 +112,7 @@ def dispatch_ini_ering_data()
     file_original_content = e__file_read(file_full_path)
     puts "file_original_content = #{file_original_content}"
     puts "import_value = #{import_value}"
-    text_replace_regex = Regex.new("#{dummy_text_replace}")
+    text_replace_regex = Regexp.new("#{dummy_text_replace}")
     puts "text_replace_regex = #{text_replace_regex}"
     puts text_replace_regex.class
     new_content = file_original_content.sub!(text_replace_regex, import_value)
