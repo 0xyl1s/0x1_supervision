@@ -106,7 +106,7 @@ def dispatch_ini_ering_data()
     dummy_text_replace = ering_data[:dummy_text_replace]
     file_relative_path = ering_data[:file_relative_path]
     file_full_path = File.join(@ec1_ini_ering_basedir, file_relative_path)
-    abort "ERROR: can't access file #{file_full_path}" unless e__is_a_file(file_full_path)
+    abort "ERROR: can't access file #{file_full_path}" unless e__is_a_file?(file_full_path)
     file_original_content = e__file_read(file_full_path)
     file_new_content = file_original_content.sub(dummy_text_replace, import_value)
     puts "file #{file_full_path} => replacing dummy content #{dummy_text_replace} by new content #{import_value}"
