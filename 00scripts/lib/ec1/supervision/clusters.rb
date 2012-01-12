@@ -27,6 +27,7 @@ include Ec1::Lib::Toolkit::Online
 def initialize(os, cluster_type, ering_version)
   @ec1_supervision_new_cluster_basedir = File.expand_path("~/.ec1.sup/cluster.new")
   @ec1_ini_ering_basedir = "#{@ec1_supervision_new_cluster_basedir}/.ec1.ini.ering"
+  @ec1_ini_ering_data_filepath = "#{@ec1_ini_ering_basedir}/.ec1.ini.ering.data"
 end
 
 end
@@ -43,17 +44,22 @@ def initialize(os, cluster_type, ering_version)
   abort "ERROR: when starting new cluster installation, ec1_supervision_new_cluster_basedir should be empty (#{@ec1_supervision_new_cluster_basedir})" unless e__dir_is_empty?(@ec1_supervision_new_cluster_basedir)
   @ering_version = ering_version
   download_raw_install_ini_dir
-  puts "\n\nec1.cluster_ini_phase1 completed. When datafile completed\n#{@ec1_ini_ering_basedir}/.ec1.ini.ering.data\n, please run\n\n"
+  puts "\n\nec1.cluster_ini_phase1 completed. When datafile completed\n#{@ec1_ini_ering_data_filepath}\n, please run\n\ne.cluster_ini_ering.cc01.phase2\n\n"
+  system "e #{ec1_ini_ering_data_filepath}"
 end
 
 
 private
 
 def download_raw_install_ini_dir()
+  # dowloading raw ini dir archive
   ini_dir_archive_uri = "https://raw.github.com/epiculture/ec1_supervision_templates/master/#{@os}/erings/#{@cluster_type}/ini_ering_templates/variation_01/.ec1.ini.ering.tar"
   e__http_download_and_save(ini_dir_archive_uri, @ec1_supervision_new_cluster_basedir)
+  # extracting ini dir tar archive
   system "cd #{@ec1_supervision_new_cluster_basedir} ; tar xvf ./.ec1.ini.ering.tar"
   abort "ERROR: can't access @ec1_ini_ering_basedir (#{@ec1_ini_ering_basedir})" unless e__is_a_dir?(@ec1_ini_ering_basedir)
+  e__file_move("#{@ec1_supervision_new_cluster_basedir}/.ec1.ini.ering.tar", "#{@ec1_ini_ering_basedir}/")
+  # downloading ering_ini_file
   ering_uri = "https://raw.github.com/epiculture/ec1_supervision_templates/master/#{@os}/erings/#{@cluster_type}/ering.#{@cluster_type_shortname}#{@ering_version}"
   e__http_download_and_save(ering_uri, @ec1_ini_ering_basedir)
   ering_ini_file = "#{@ec1_ini_ering_basedir}/ering.#{@cluster_type_shortname}#{@ering_version}"
