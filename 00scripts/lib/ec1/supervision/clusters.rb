@@ -90,18 +90,21 @@ def initialize(os, cluster_type, ering_version)
 end
 
 def dispatch_ini_ering_data()
-  ec1_machine_ssh_port = {
-                         :import_value => EC1_MACHINE_SSH_PORT,
-                         :dummy_text_replace => '@@_ec1_machine_ssh_port_@@',
-                         :file_relative_path => 'dispatch/system/00data/machine.ssh_port'
-                         }
-  puts ec1_machine_ssh_port[:import_value]
-  puts ec1_machine_ssh_port[:dummy_text_replace]
-  puts ec1_machine_ssh_port[:file_relative_path]
-  processed_value = ec1_machine_ssh_port
-  puts processed_value.class
-  processed_value[:file_full_path] = File.join(@ec1_ini_ering_basedir, processed_value[:file_relative_path])
-  puts processed_value[:file_full_path]
+  imported_ini_ering_data = { 
+                             ec1_machine_ssh_port = {
+                                                    :import_value => EC1_MACHINE_SSH_PORT,
+                                                    :dummy_text_replace => '@@_ec1_machine_ssh_port_@@',
+                                                    :file_relative_path => 'dispatch/system/00data/machine.ssh_port'
+                                                    }
+                             }
+  imported_ini_ering_data.each_pair do |ini_ering, ini_ering_data|
+    import_value = ini_ering[ering_data[:import_value]]
+    dummy_text_replace = ini_ering[ering_data[:dummy_text_replace]]
+    file_relative_path = ini_ering[ering_data[:file_relative_path]]
+    file_full_path = File.join(@ec1_ini_ering_basedir, file_relative_path)
+    puts "file #{file_full_path} => replacing dummy content #{dummy_text_replace} by new content #{import_value}"
+    #e__file_overwrite(ini_ering[ering_data[:import_value], ini_ering[ering_data[:file_full_path])
+  end
 end
 
 end
