@@ -44,7 +44,7 @@ def initialize(os, cluster_type, ering_version)
   abort "ERROR: when starting new cluster installation, ec1_supervision_new_cluster_basedir should be empty (#{@ec1_supervision_new_cluster_basedir})" unless e__dir_is_empty?(@ec1_supervision_new_cluster_basedir)
   @ering_version = ering_version
   download_raw_install_ini_dir
-  puts "\n\nec1.cluster_ini_phase1 completed. When datafile completed\n#{@ec1_ini_ering_data_filepath}\n, please run\n\ne.cluster_ini_ering.cc01.phase2\n\n"
+  puts "\n\nec1.cluster_ini_phase1 completed. When datafile is filled #{@ec1_ini_ering_data_filepath}, please run\n\ne.cluster_ini_ering.cc01.phase2\n\n"
   system "e #{@ec1_ini_ering_data_filepath}"
 end
 
@@ -77,6 +77,16 @@ end
 
 def cluster_type_shortname(cluster_type)
   CLUSTER_TYPE_SHORTNAMES[cluster_type]
+end
+
+end
+
+class ClusterIniPhase2 < ClusterIni
+require @ec1_ini_ering_data_filepath
+
+def initialize(os, cluster_type, ering_version)
+  super
+  puts bou
 end
 
 end
