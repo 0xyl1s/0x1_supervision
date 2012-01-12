@@ -91,8 +91,8 @@ end
 def dispatch_ini_ering_data
   ec1_machine_ssh_port = {
                          :import_value => EC1_MACHINE_SSH_PORT,
-                         :dummy_text_replace => '@@_ec1_machine_ssh_port_@@'
-                         :file_relative_path => ''
+                         :dummy_text_replace => '@@_ec1_machine_ssh_port_@@',
+                         :file_relative_path => '...file...'
                          }
   puts ec1_machine_ssh_port[:import_value]
   puts ec1_machine_ssh_port[:dummy_text_replace]
