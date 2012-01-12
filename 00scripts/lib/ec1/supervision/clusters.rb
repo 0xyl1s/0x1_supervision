@@ -90,13 +90,13 @@ def initialize(os, cluster_type, ering_version)
 end
 
 def dispatch_ini_ering_data()
-  #imported_ini_ering_data = { 
-                             #ec1_machine_ssh_port = {
-                                                    #:import_value => EC1_MACHINE_SSH_PORT,
-                                                    #:dummy_text_replace => '@@_ec1_machine_ssh_port_@@',
-                                                    #:file_relative_path => 'dispatch/system/00data/machine.ssh_port'
-                                                    #},
-                             #}
+  imported_ini_ering_data = { 
+                             ec1_machine_ssh_port = {
+                                                    :import_value => EC1_MACHINE_SSH_PORT,
+                                                    :dummy_text_replace => '@@_ec1_machine_ssh_port_@@',
+                                                    :file_relative_path => 'dispatch/system/00data/machine.ssh_port'
+                                                    }
+                             }
   #imported_ini_ering_data.each_pair do |ini_ering, ini_ering_data|
     #import_value = ini_ering[ering_data[:import_value]]
     #dummy_text_replace = ini_ering[ering_data[:dummy_text_replace]]
