@@ -93,12 +93,12 @@ def dispatch_ini_ering_data()
   imported_ini_ering_data = {}
   imported_ini_ering_data[:ec1_machine_ssh_port] = {
                                                     :import_value => EC1_MACHINE_SSH_PORT,
-                                                    :dummy_text_replace => '@@_ec1_machine_ssh_port_@@',
+                                                    :dummy_text_replace => '@@_ec1_machine.ssh_port_@@',
                                                     :file_relative_path => 'dispatch/system/00data/machine.ssh_port'
                                                     }
   imported_ini_ering_data[:ec1_entity_domain] = {
                                                     :import_value => EC1_ENTITY_DOMAIN,
-                                                    :dummy_text_replace => '@@_ec1_entity_domain_@@',
+                                                    :dummy_text_replace => '@@_ec1_entity.domain_@@',
                                                     :file_relative_path => 'dispatch/system/00data/entity.domain'
                                                     }
   imported_ini_ering_data.each_pair do |ini_ering, ering_data|
@@ -112,8 +112,7 @@ def dispatch_ini_ering_data()
     file_original_content = e__file_read(file_full_path)
     puts "file_original_content = #{file_original_content}"
     puts "import_value = #{import_value}"
-    text_replace_regex = Regexp.new("@@")
-    #text_replace_regex = Regexp.new("#{dummy_text_replace.chomp}")
+    text_replace_regex = Regexp.new("#{dummy_text_replace.chomp}")
     puts "text_replace_regex = #{text_replace_regex}"
     new_content = file_original_content.gsub!(text_replace_regex, import_value)
     puts "new_content = #{new_content}"
