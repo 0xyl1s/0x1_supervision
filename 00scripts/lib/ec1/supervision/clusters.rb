@@ -115,7 +115,7 @@ def dispatch_ini_ering_data()
     text_replace_regex = Regexp.new("#{dummy_text_replace}")
     puts "text_replace_regex = #{text_replace_regex}"
     puts text_replace_regex.class
-    new_content = file_original_content.sub!(text_replace_regex, import_value)
+    new_content = file_original_content.gsub!(/@@/, import_value)
     puts "new_content = #{new_content}"
     puts "file_full_path = #{file_full_path}"
     e__file_overwrite(new_content, file_full_path)
