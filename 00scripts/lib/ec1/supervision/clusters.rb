@@ -55,7 +55,11 @@ def initialize(os, cluster_type, ering_version)
   download_raw_install_ini_dir
   puts "\n\nec1.cluster_ini_phase1 completed. When datafile is filled #{@ec1_ini_ering_data_filepath}, please run\n\ne.cluster_ini_ering.#{@ering_current}.phase2\n\n"
   %x"e #{@ec1_ini_ering_data_filepath}"
-  e__file_save_nl(e__datetime_sec, "#{@ec1_ini_ering_logsdir}/e.cluster_ini_ering.#{@ering_current}.phase1.done")
+  ec1_ini_ering_phase1_done_file = "#{@ec1_ini_ering_logsdir}/e.cluster_ini_ering.#{@ering_current}.phase1.done"
+  puts "EC1DEBUG>>> ec1_ini_ering_phase1_done_file = #{ec1_ini_ering_phase1_done_file}"
+  puts "EC1DEBUG>>> e__datetime_sec = #{e__datetime_sec}"
+  e__file_save_nl(e__datetime_sec, ec1_ini_ering_phase1_done_file)
+  abort "ERROR: can't process ini phase1 done log file" unless e__is_a_file?(ec1_ini_ering_phase1_done_file)
   ClusterIniPhase2.new(@os, @cluster_type, @ering_version)
 end
 
@@ -96,7 +100,6 @@ class ClusterIniPhase2 < ClusterIni
 
 def initialize(os, cluster_type, ering_version)
   super
-  abort "ERROR: can't process ini phase1 done log file" unless e__is_a_file?("#{@ec1_ini_ering_logsdir}/e.cluster_ini_ering.#{@ering_current}.phase1.done")
   require @ec1_ini_ering_data_filepath
   dispatch_ini_ering_data
   certificates_create
