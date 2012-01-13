@@ -242,9 +242,7 @@ def remote_execute()
     else
       puts "#{e__datetime_sec} >>> checking remote_check_phase_system_done_ering_command\n#{remote_check_phase_system_done_ering_command}"
       remote_check_phase_system_done_ering = system(remote_check_phase_system_done_ering_command).to_s
-      puts "EC1DEBUG: #{remote_check_phase_system_done_ering.class}"
-      puts "EC1DEBUG: #{remote_check_phase_system_done_ering.size}"
-      puts "EC1DEBUG: #{remote_check_phase_system_done_ering.chomp.size}"
+      puts "EC1DEBUG: #{remote_check_phase_system_done_ering.class} (size = #{remote_check_phase_system_done_ering.size}/ chomped: #{remote_check_phase_system_done_ering.chomp.size}) : #{remote_check_phase_system_done_ering}"
       if remote_check_phase_system_done_ering.chomp == 'done'
         puts "#{e__datetime_sec} >>> ering_ini_phase_system: DONE"
         puts "#{e__datetime_sec} >>> starting root_phase\n#{ering_ini_ssh_root_phases_command}"
