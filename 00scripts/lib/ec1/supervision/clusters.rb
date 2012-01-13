@@ -102,7 +102,6 @@ def initialize(os, cluster_type, ering_version)
   dispatch_ini_ering_data
   certificates_create
   e__file_save_nl(e__datetime_sec, "#{@ec1_ini_ering_logsdir}/e.cluster_ini_ering.#{@ering_current}.phase2.done")
-  project_cluster_ini_dir
   remote_execute
 end
 
@@ -208,34 +207,65 @@ def certificates_create()
   system "cd #{mainuser_00certificates_ini_ering_path} ; echo 'ec1>>> generating mainuser default ssh certificate #{EC1_MAINUSER_SSH_DEFCERT_PASSCODE}' ; e.certificate_create ./ #{EC1_MACHINE_HOSTNAME}_#{EC1_MAINUSER_NAME}_v1 #{EC1_MAINUSER_SSH_DEFCERT_PASSCODE} -c"
 end
 
-def project_cluster_ini_dir()
-  rsync_command = "rsync -avh --no-o --no-g --stats --progress #{@ec1_ini_ering_basedir}/ nc:/root/#{@ec1_ini_ering_dir}/"
-  puts rsync_command
-  system rsync_command
-end
-
 def remote_execute()
-  # TODO: need to get system call pid to kill stucked ssh connection tries
-  # launching remote phase_system
-  puts "EC1DEBUG>>> @ering_current = #{@ering_current}"
-  remote_execute_command = "sshpass -p #{EC1_ROOT_TEMPPASS} e.. nc 'bash /root/#{@ec1_ini_ering_dir}/ering.#{@ering_current}' &"
-  puts "#{e__datetime_sec} >>> starting remote phase_system (#{remote_execute_command})"
-  system remote_execute_command
-  remote_check_phase_system_done_ering = "sshpass -p #{EC1_ROOT_TEMPPASS} ssh nc 'cat /root/#{@ec1_ini_ering_dir}/logs/ec1.ini.system.done.ering'"
-  until remote_check_phase_system_done_ering == 'done'
-    puts "#{e__datetime_sec} >>> checking remote_check_phase_system_done_ering (#{remote_check_phase_system_done_ering})"
-    system remote_check_phase_system_done_ering
-    sleep 30
+  until @rsync_command_executed
+    rsync_command = "sshpass -p#{EC1_ROOT_TEMPPASS} rsync -avh --no-o --no-g --stats --progress --rsh='ssh -p#{EC1_MACHINE_TEMP_SSH_PORT}' #{@ec1_ini_ering_basedir}/ root@#{EC1_MACHINE_TEMP_IP}:/root/#{@ec1_ini_ering_dir}/"
+    if not e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
+      puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
+    else
+      puts rsync_command
+      system rsync_command
+      @rsync_command_executed = true
+    end
+    sleep 10
   end
+
+  # launching remote phase_system
+  ering_ini_ssh_root_phases_command = "#{ssh_root_temp_command} 'bash /root/#{@ec1_ini_ering_dir}/ering.#{@ering_current}' &"
+  until @ering_ini_ssh_root_phases_command_executed
+    ssh_root_temp_command = "sshpass -p#{EC1_ROOT_TEMPPASS} ssh -p#{EC1_MACHINE_TEMP_SSH_PORT} root@#{EC1_MACHINE_TEMP_IP}"
+    if not e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
+      puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
+    else
+      puts "#{e__datetime_sec} >>> starting remote phase_system installation (#{ering_ini_ssh_root_phases_command})"
+      system ering_ini_ssh_root_phases_command
+    end
+    sleep 10
+  end
+
   # launching remote phase_root
-  puts "#{e__datetime_sec} >>> starting root_phase2 (#{remote_execute_command})"
-  system remote_execute_command
+  remote_check_phase_system_done_ering = "#{ssh_root_temp_command} 'cat /root/#{@ec1_ini_ering_dir}/logs/ec1.ini.system.done.ering'"
+  until @remote_check_phase_system_done_ering_checked
+    if not e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
+      puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
+    else
+      puts "#{e__datetime_sec} >>> checking remote_check_phase_system_done_ering (#{remote_check_phase_system_done_ering})"
+      system remote_check_phase_system_done_ering
+      if remote_check_phase_system_done_ering == 'done'
+        puts "#{e__datetime_sec} >>> ering_ini_phase_system: DONE"
+        puts "#{e__datetime_sec} >>> starting root_phase (#{ering_ini_ssh_root_phases_command})"
+        system ering_ini_ssh_root_phases_command
+        @remote_check_phase_system_done_ering_checked = true
+      end
+    end
+    ering_ini_install_done?
+    sleep 20
+  end
+
   # checking system_ready
-  remote_check_system_ready_ering = "sshpass -p #{EC1_ROOT_TEMPPASS} ssh nc 'cat /home/#{EC1_MAINUSER_NAME}/.ec1.ini_user/ec1.ini.system.ready.ering'"
-  until remote_check_system_ready_ering == 'ready'
-    puts "#{e__datetime_sec} >>> checking remote_check_system_ready_ering (#{remote_check_system_ready_ering})"
-    system remote_check_system_ready_ering
-    sleep 30
+  ssh_mainuser_command = "ssh -p#{EC1_MACHINE_SSH_PORT} #{EC1_MAINUSER_NAME}@#{EC1_MACHINE_TEMP_IP}"
+  remote_check_system_ready_command = "#{ssh_mainuser_command} 'cat /home/#{EC1_MAINUSER_NAME}/.ec1.ini_user/ec1.ini.system.ready.ering'"
+  until @remote_check_system_ready_checked
+    if not e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT) then
+      puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
+    else
+      puts "#{e__datetime_sec} >>> checking remote_check_system_ready (#{remote_check_system_ready_command})"
+      system remote_check_system_ready_command
+      if remote_check_system_ready == 'ready'
+        @remote_check_system_ready_checked = true
+      end
+    end
+    sleep 20
   end
 end
 
