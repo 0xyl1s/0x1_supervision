@@ -18,6 +18,7 @@ CLUSTER_TYPE_SHORTNAMES = {
                           'cluster.leaf' => 'cf'
                           }
 
+# TODO: merge phases 1 and 2 classes into main ClusterIni class
 class ClusterIni
 require 'ec1/lib/toolkit/standard.rb'
 include Ec1::Lib::Toolkit::Standard
@@ -28,7 +29,9 @@ def initialize(os, cluster_type, ering_version)
   # TODO: convert to ec1_lib method e__user_homedir
   ec1_user_homedir = File.expand_path("~")
   @ec1_supervision_new_cluster_basedir = "#{ec1_user_homedir}/.ec1.sup/cluster.new"
-  @ec1_ini_ering_basedir = "#{@ec1_supervision_new_cluster_basedir}/.ec1.ini.ering"
+  @ec1_ini_ering_dir = ".ec1.ini.ering"
+  @ec1_ini_ering_basedir = "#{@ec1_supervision_new_cluster_basedir}/#{@ec1_ini_ering_dir}"
+  @ec1_ini_ering_logsdir = "#{@ec1_supervision_new_cluster_basedir}/.ec1.ini.ering/logs"
   @ec1_ini_ering_data_filepath = "#{@ec1_ini_ering_basedir}/.ec1.ini.ering.data.rb"
 end
 
@@ -50,6 +53,8 @@ def initialize(os, cluster_type, ering_version)
   download_raw_install_ini_dir
   puts "\n\nec1.cluster_ini_phase1 completed. When datafile is filled #{@ec1_ini_ering_data_filepath}, please run\n\ne.cluster_ini_ering.cc01.phase2\n\n"
   %x"e #{@ec1_ini_ering_data_filepath}"
+  e__file_save_nl(e__datetime_sec, "#{@ec1_ini_ering_logsdir}/e.cluster_ini_ering.cc01.phase1.done")
+  ClusterIniPhase2.new(@os, @cluster_type, @ering_version)
 end
 
 
@@ -89,9 +94,12 @@ class ClusterIniPhase2 < ClusterIni
 
 def initialize(os, cluster_type, ering_version)
   super
+  abort "ERROR: can't process ini phase1 done log file" unless e__is_a_file?("#{@ec1_ini_ering_logsdir}/e.cluster_ini_ering.cc01.phase1.done")
   require @ec1_ini_ering_data_filepath
   dispatch_ini_ering_data
   certificates_create
+  e__file_save_nl(e__datetime_sec, "#{@ec1_ini_ering_logsdir}/e.cluster_ini_ering.cc01.phase2.done")
+  project_cluster_ini_dir
 end
 
 def dispatch_ini_ering_data()
@@ -182,10 +190,6 @@ def dispatch_ini_ering_data()
     file_new_content = e__file_read(file_full_path)
   end
 
-  @ec1_machine_hostname = imported_ini_ering_data[:ec1_machine_hostname][:import_value]
-  @ec1_root_name = imported_ini_ering_data[:ec1_root_name][:import_value]
-  @ec1_mainuser_name = imported_ini_ering_data[:ec1_mainuser_name][:import_value]
-
 end
 
 def certificates_create()
@@ -193,6 +197,12 @@ def certificates_create()
   mainuser_00certificates_ini_ering_path = "#{@ec1_ini_ering_basedir}/dispatch/mainuser/00certificates"
   system "cd #{root_00certificates_ini_ering_path} ; echo 'ec1>>> generating root default ssh certificate' ; e.certificate_create ./ #{EC1_MACHINE_HOSTNAME}_#{EC1_ROOT_NAME}_v1 #{EC1_ROOT_SSH_DEFCERT_PASSCODE} -c"
   system "cd #{mainuser_00certificates_ini_ering_path} ; echo 'ec1>>> generating mainuser default ssh certificate' ; e.certificate_create ./ #{EC1_MACHINE_HOSTNAME}_#{EC1_MAINUSER_NAME}_v1 #{EC1_MAINUSER_SSH_DEFCERT_PASSCODE} -c"
+end
+
+def project_cluster_ini_dir()
+  rsync_command = "rsync -avh --no-o --no-g --stats --progress #{@ec1_ini_ering_basedir}/ newcluster:/root/#{@ec1_ini_ering_dir}/"
+  puts rsync_command
+  system rsync_command
 end
 
 end
