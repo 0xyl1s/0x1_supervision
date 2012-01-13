@@ -242,6 +242,7 @@ def remote_execute()
     else
       puts "#{e__datetime_sec} >>> checking remote_check_phase_system_done_ering_command\n#{remote_check_phase_system_done_ering_command}"
       remote_check_phase_system_done_ering = system(remote_check_phase_system_done_ering_command)
+      next unless remote_check_phase_system_done_ering
       puts "EC1DEBUG: #{remote_check_phase_system_done_ering.class}"
       puts "EC1DEBUG: #{remote_check_phase_system_done_ering.size}"
       puts "EC1DEBUG: #{remote_check_phase_system_done_ering.chomp.size}"
