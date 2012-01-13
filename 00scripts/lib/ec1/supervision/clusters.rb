@@ -167,17 +167,23 @@ def dispatch_ini_ering_data()
     file_full_path = File.join(@ec1_ini_ering_basedir, file_relative_path)
     abort "ERROR: can't access file #{file_full_path}" unless e__is_a_file?(file_full_path)
     file_original_content = e__file_read(file_full_path)
-    puts "file_original_content = #{file_original_content}"
-    puts "import_value = #{import_value}"
     text_replace_regex = Regexp.new("#{dummy_text_replace.chomp}")
-    puts "text_replace_regex = #{text_replace_regex}"
     new_content = file_original_content.gsub!(text_replace_regex, import_value)
-    puts "new_content = #{new_content}"
-    puts "file_full_path = #{file_full_path}"
     e__file_overwrite(new_content, file_full_path)
     file_new_content = e__file_read(file_full_path)
-    puts "file_new_content = #{file_new_content}"
   end
+
+  @ec1_machine_hostname = imported_ini_ering_data[:ec1_machine_hostname][:import_value]
+  @ec1_root_name = imported_ini_ering_data[:ec1_root_name][:import_value]
+  @ec1_mainuser_name = imported_ini_ering_data[:ec1_mainuser_name][:import_value]
+
+end
+
+def certificates_create()
+  root_00certificates_ini_ering_path = "#{@ec1_ini_ering_basedir}/dispatch/root/00certificates"
+  mainuser_00certificates_ini_ering_path = "#{@ec1_ini_ering_basedir}/dispatch/mainuser/00certificates"
+  system "cd #{root_00certificates_ini_ering_path} ; echo "ec1>>> generating root default ssh certificate" ; e.certificate_create ./ #{EC1_MACHINE_HOSTNAME}_#{EC1_ROOT_NAME}_v1 #{EC1_ROOT_SSH_DEFCERT_PASSCODE} -c"
+  system "cd #{mainuser_00certificates_ini_ering_path} ; echo "ec1>>> generating mainuser default ssh certificate" ; e.certificate_create ./ #{EC1_MACHINE_HOSTNAME}_#{EC1_MAINUSER_NAME}_v1 #{EC1_MAINUSER_SSH_DEFCERT_PASSCODE} -c"
 end
 
 end
