@@ -234,13 +234,14 @@ def remote_execute()
   end
 
   # launching remote phase_root
-  remote_check_phase_system_done_ering = "#{ssh_root_temp_command} 'cat /root/#{@ec1_ini_ering_dir}/logs/ec1.ini.system.done.ering'"
+  remote_check_phase_system_done_ering_command = "#{ssh_root_temp_command} 'cat /root/#{@ec1_ini_ering_dir}/logs/ec1.ini.system.done.ering 2>/dev/null'"
   until @remote_check_phase_system_done_ering_checked
+    break if @remote_check_system_ready_checked
     unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
       puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     else
-      puts "#{e__datetime_sec} >>> checking remote_check_phase_system_done_ering\n#{remote_check_phase_system_done_ering}"
-      system remote_check_phase_system_done_ering
+      puts "#{e__datetime_sec} >>> checking remote_check_phase_system_done_ering_command\n#{remote_check_phase_system_done_ering_command}"
+      remote_check_phase_system_done_ering = system(remote_check_phase_system_done_ering_command)
       puts "EC1DEBUG: #{remote_check_phase_system_done_ering.class}"
       puts "EC1DEBUG: #{remote_check_phase_system_done_ering.size}"
       puts "EC1DEBUG: #{remote_check_phase_system_done_ering.chomp.size}"
@@ -252,23 +253,25 @@ def remote_execute()
         @remote_check_phase_system_done_ering_checked = true
       end
     end
+    remote_checking_system_ready
     sleep 20
   end
+end
 
+def remote_checking_system_ready()
   # checking system_ready
   ssh_mainuser_command = "ssh -p#{EC1_MACHINE_SSH_PORT} #{EC1_MAINUSER_NAME}@#{EC1_MACHINE_TEMP_IP}"
-  remote_check_system_ready_command = "#{ssh_mainuser_command} 'cat /home/#{EC1_MAINUSER_NAME}/.ec1.ini_user/ec1.ini.system.ready.ering'"
+  remote_check_system_ready_command = "#{ssh_mainuser_command} 'cat /home/#{EC1_MAINUSER_NAME}/.ec1.ini_user/ec1.ini.system.ready.ering 2>/dev/null'"
   until @remote_check_system_ready_checked
     unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT) then
       puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     else
-      puts "#{e__datetime_sec} >>> checking remote_check_system_ready\n#{remote_check_system_ready_command}"
-      system remote_check_system_ready_command
+      puts "#{e__datetime_sec} >>> checking remote_check_system_ready_command\n#{remote_check_system_ready_command}"
+      remote_check_system_ready = system(remote_check_system_ready_command)
       if remote_check_system_ready == 'ready'
         @remote_check_system_ready_checked = true
       end
     end
-    sleep 20
   end
 end
 
