@@ -182,8 +182,8 @@ end
 def certificates_create()
   root_00certificates_ini_ering_path = "#{@ec1_ini_ering_basedir}/dispatch/root/00certificates"
   mainuser_00certificates_ini_ering_path = "#{@ec1_ini_ering_basedir}/dispatch/mainuser/00certificates"
-  system "cd #{root_00certificates_ini_ering_path} ; echo "ec1>>> generating root default ssh certificate" ; e.certificate_create ./ #{EC1_MACHINE_HOSTNAME}_#{EC1_ROOT_NAME}_v1 #{EC1_ROOT_SSH_DEFCERT_PASSCODE} -c"
-  system "cd #{mainuser_00certificates_ini_ering_path} ; echo "ec1>>> generating mainuser default ssh certificate" ; e.certificate_create ./ #{EC1_MACHINE_HOSTNAME}_#{EC1_MAINUSER_NAME}_v1 #{EC1_MAINUSER_SSH_DEFCERT_PASSCODE} -c"
+  system "cd #{root_00certificates_ini_ering_path} ; echo "ec1 generating root default ssh certificate" ; e.certificate_create ./ #{EC1_MACHINE_HOSTNAME}_#{EC1_ROOT_NAME}_v1 #{EC1_ROOT_SSH_DEFCERT_PASSCODE} -c"
+  system "cd #{mainuser_00certificates_ini_ering_path} ; echo "ec1 generating mainuser default ssh certificate" ; e.certificate_create ./ #{EC1_MACHINE_HOSTNAME}_#{EC1_MAINUSER_NAME}_v1 #{EC1_MAINUSER_SSH_DEFCERT_PASSCODE} -c"
 end
 
 end
