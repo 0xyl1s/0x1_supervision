@@ -200,7 +200,7 @@ def certificates_create()
 end
 
 def project_cluster_ini_dir()
-  rsync_command = "rsync -avh --no-o --no-g --stats --progress #{@ec1_ini_ering_basedir}/ newcluster:/root/#{@ec1_ini_ering_dir}/"
+  rsync_command = "rsync -avh --no-o --no-g --stats --progress #{@ec1_ini_ering_basedir}/ nc:/root/#{@ec1_ini_ering_dir}/"
   puts rsync_command
   system rsync_command
 end
