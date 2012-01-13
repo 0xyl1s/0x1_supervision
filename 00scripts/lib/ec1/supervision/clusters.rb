@@ -45,7 +45,7 @@ def initialize(os, cluster_type, ering_version)
   @ering_version = ering_version
   download_raw_install_ini_dir
   puts "\n\nec1.cluster_ini_phase1 completed. When datafile is filled #{@ec1_ini_ering_data_filepath}, please run\n\ne.cluster_ini_ering.cc01.phase2\n\n"
-  #%x"e #{@ec1_ini_ering_data_filepath}"
+  %x"e #{@ec1_ini_ering_data_filepath}"
 end
 
 
@@ -122,6 +122,11 @@ def dispatch_ini_ering_data()
                                              :import_value => EC1_ROOT_NAME,
                                              :dummy_text_replace => '@@_ec1_root_name_@@',
                                              :file_relative_path => 'dispatch/root/00data/user.name'
+                                            }
+  imported_ini_ering_data[:ec1_root_email] = {
+                                             :import_value => EC1_ROOT_EMAIL,
+                                             :dummy_text_replace => '@@_ec1_root_email_@@',
+                                             :file_relative_path => 'dispatch/root/00data/user.email'
                                             }
   imported_ini_ering_data[:ec1_root_password] = {
                                              :import_value => EC1_ROOT_PASSWORD,
