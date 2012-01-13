@@ -210,7 +210,7 @@ end
 def remote_execute()
   until @rsync_command_executed
     rsync_command = "sshpass -p#{EC1_ROOT_TEMPPASS} rsync -avh --no-o --no-g --stats --progress --rsh='ssh -p#{EC1_MACHINE_TEMP_SSH_PORT}' #{@ec1_ini_ering_basedir}/ root@#{EC1_MACHINE_TEMP_IP}:/root/#{@ec1_ini_ering_dir}/"
-    if not e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
+    unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
       puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     else
       puts rsync_command
@@ -224,11 +224,12 @@ def remote_execute()
   ssh_root_temp_command = "sshpass -p#{EC1_ROOT_TEMPPASS} ssh -p#{EC1_MACHINE_TEMP_SSH_PORT} root@#{EC1_MACHINE_TEMP_IP}"
   ering_ini_ssh_root_phases_command = "#{ssh_root_temp_command} 'bash /root/#{@ec1_ini_ering_dir}/ering.#{@ering_current}' &"
   until @ering_ini_ssh_root_phases_command_executed
-    if not e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
+    unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
       puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     else
       puts "#{e__datetime_sec} >>> starting remote phase_system installation (#{ering_ini_ssh_root_phases_command})"
       system ering_ini_ssh_root_phases_command
+      @ering_ini_ssh_root_phases_command_executed = true
     end
     sleep 10
   end
@@ -236,7 +237,7 @@ def remote_execute()
   # launching remote phase_root
   remote_check_phase_system_done_ering = "#{ssh_root_temp_command} 'cat /root/#{@ec1_ini_ering_dir}/logs/ec1.ini.system.done.ering'"
   until @remote_check_phase_system_done_ering_checked
-    if not e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
+    unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
       puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     else
       puts "#{e__datetime_sec} >>> checking remote_check_phase_system_done_ering (#{remote_check_phase_system_done_ering})"
@@ -256,7 +257,7 @@ def remote_execute()
   ssh_mainuser_command = "ssh -p#{EC1_MACHINE_SSH_PORT} #{EC1_MAINUSER_NAME}@#{EC1_MACHINE_TEMP_IP}"
   remote_check_system_ready_command = "#{ssh_mainuser_command} 'cat /home/#{EC1_MAINUSER_NAME}/.ec1.ini_user/ec1.ini.system.ready.ering'"
   until @remote_check_system_ready_checked
-    if not e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT) then
+    unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT) then
       puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     else
       puts "#{e__datetime_sec} >>> checking remote_check_system_ready (#{remote_check_system_ready_command})"
