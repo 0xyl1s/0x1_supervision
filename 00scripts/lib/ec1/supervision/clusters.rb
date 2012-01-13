@@ -27,6 +27,7 @@ include Ec1::Lib::Toolkit::Online
 
 def initialize(os, cluster_type, ering_version)
   # TODO: convert to ec1_lib method e__user_homedir
+  # TODO: check availability of the mandatory sshpass program
   ec1_user_homedir = File.expand_path("~")
   @ec1_supervision_new_cluster_basedir = "#{ec1_user_homedir}/.ec1.sup/cluster.new"
   @ec1_ini_ering_dir = ".ec1.ini.ering"
@@ -147,6 +148,11 @@ def dispatch_ini_ering_data()
                                              :dummy_text_replace => '@@_ec1_root_password_@@',
                                              :file_relative_path => 'dispatch/root/00data/user.password'
                                             }
+  imported_ini_ering_data[:ec1_root_mainuser_name] = {
+                                             :import_value => EC1_MAINUSER_NAME,
+                                             :dummy_text_replace => '@@_ec1_mainuser_name_@@',
+                                             :file_relative_path => 'dispatch/root/00data/mainuser.name'
+                                            }
   imported_ini_ering_data[:ec1_mainuser_name] = {
                                              :import_value => EC1_MAINUSER_NAME,
                                              :dummy_text_replace => '@@_ec1_mainuser_name_@@',
@@ -208,14 +214,27 @@ def project_cluster_ini_dir()
 end
 
 def remote_execute()
-  remote_execute_command_phase2 = "sshpass-p #{EC1_ROOT_TEMPPASS} e.. nc 'bash /root/#{@ec1_ini_ering_dir}/ering.#{@ering_current}'"
-  puts "#{e__datetime_sec} >>> remote phase1"
-  system remote_execute_command_phase1
-  puts "#{e__datetime_sec} >>> remote phase2 will begin in 5 minutes"
-  puts "... if stuck, launch:"
-  puts remote_execute_command_phase2
-  sleep 300
-  system remote_execute_command_phase2
+  # TODO: need to get system call pid to kill stucked ssh connection tries
+  # launching remote phase_system
+  remote_execute_command = "sshpass -p #{EC1_ROOT_TEMPPASS} e.. nc 'bash /root/#{@ec1_ini_ering_dir}/ering.#{@ering_current}' &"
+  puts "#{e__datetime_sec} >>> starting remote phase_system (#{remote_execute_command})"
+  system remote_execute_command
+  remote_check_phase_system_done_ering = "sshpass -p #{EC1_ROOT_TEMPPASS} ssh nc 'cat /root/#{@ec1_ini_ering_dir}/logs/ec1.ini.system.done.ering"
+  until remote_check_phase_system_done_ering == 'done'
+    puts "#{e__datetime_sec} >>> checking remote_check_phase_system_done_ering (#{remote_check_phase_system_done_ering})"
+    system remote_check_phase_system_done_ering
+    sleep 30
+  end
+  # launching remote phase_root
+  puts "#{e__datetime_sec} >>> starting root_phase2 (#{remote_execute_command})"
+  system remote_execute_command
+  # checking system_ready
+  remote_check_system_ready_ering = "sshpass -p #{EC1_ROOT_TEMPPASS} ssh nc 'cat /home/#{EC1_MAINUSER_NAME}/.ec1.ini_user/ec1.ini.system.ready.ering"
+  until remote_check_system_ready_ering == 'ready'
+    puts "#{e__datetime_sec} >>> checking remote_check_system_ready_ering (#{remote_check_system_ready_ering})"
+    system remote_check_system_ready_ering
+    sleep 30
+  end
 end
 
 end
