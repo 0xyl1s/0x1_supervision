@@ -28,12 +28,30 @@ include Ec1::Lib::Toolkit::Online
 def initialize(os, cluster_type, ering_version)
   # TODO: convert to ec1_lib method e__user_homedir
   # TODO: check availability of the mandatory sshpass program
+  @os = os
+  abort "ERROR: invalid cluster_type (#{cluster_type}" unless valid_os?(os)
+  @cluster_type = cluster_type if valid_cluster_type?(cluster_type)
+  @cluster_type_shortname = cluster_type_shortname(@cluster_type)
+  @ering_version = ering_version
+  @ering_current = "#{@cluster_type_shortname}#{@ering_version}"
   ec1_user_homedir = File.expand_path("~")
   @ec1_supervision_new_cluster_basedir = "#{ec1_user_homedir}/.ec1.sup/cluster.new"
   @ec1_ini_ering_dir = ".ec1.ini.ering"
   @ec1_ini_ering_basedir = "#{@ec1_supervision_new_cluster_basedir}/#{@ec1_ini_ering_dir}"
   @ec1_ini_ering_logsdir = "#{@ec1_supervision_new_cluster_basedir}/.ec1.ini.ering/logs"
   @ec1_ini_ering_data_filepath = "#{@ec1_ini_ering_basedir}/.ec1.ini.ering.data.rb"
+end
+
+def valid_os?(os)
+  e__array_value_exist?(OSES, os)
+end
+
+def valid_cluster_type?(cluster_type)
+  e__array_value_exist?(CLUSTER_TYPES, cluster_type)
+end
+
+def cluster_type_shortname(cluster_type)
+  CLUSTER_TYPE_SHORTNAMES[cluster_type]
 end
 
 end
@@ -46,14 +64,8 @@ def initialize(os, cluster_type, ering_version)
   abort "ERROR: can't access neither create supervision basedir (#{@ec1_supervision_new_cluster_basedir})" unless e__is_a_dir?(@ec1_supervision_new_cluster_basedir)
   abort "ERROR: when starting new cluster installation, ec1_supervision_new_cluster_basedir should be empty (#{@ec1_supervision_new_cluster_basedir})" unless e__dir_is_empty?(@ec1_supervision_new_cluster_basedir)
   abort "ERROR: invalid os type (#{os}" unless valid_os?(os)
-  @os = os
-  abort "ERROR: invalid cluster_type (#{cluster_type}" unless valid_os?(os)
-  @cluster_type = cluster_type if valid_cluster_type?(cluster_type)
-  @cluster_type_shortname = cluster_type_shortname(@cluster_type)
-  @ering_version = ering_version
-  @ering_current = "#{@cluster_type_shortname}#{@ering_version}"
   download_raw_install_ini_dir
-  puts "\n\nec1.cluster_ini_phase1 completed. When datafile is filled #{@ec1_ini_ering_data_filepath}, please run\n\ne.cluster_ini_ering.#{@ering_current}.phase2\n\n"
+  puts "\n\nec1.cluster_ini_phase1 completed. When datafile is filled #{@ec1_ini_ering_data_filepath}, please run again\n\ne.cluster_ini_ering.#{@ering_current}\n\n"
   %x"e #{@ec1_ini_ering_data_filepath}"
   ec1_ini_ering_phase1_done_file = "#{@ec1_ini_ering_logsdir}/e.cluster_ini_ering.#{@ering_current}.phase1.done"
   e__file_save_nl(e__datetime_sec, ec1_ini_ering_phase1_done_file)
@@ -78,18 +90,6 @@ def download_raw_install_ini_dir()
   ering_ini_file = "#{@ec1_ini_ering_basedir}/ering.#{@ering_current}"
   abort "ERROR: ering_ini file (#{ering_ini_file}) can't be downloaded from #{ering_uri}" unless e__is_a_file?(ering_ini_file)
   puts "dowloaded ering_ini_file (#{ering_ini_file}, from #{ering_uri})"
-end
-
-def valid_os?(os)
-  e__array_value_exist?(OSES, os)
-end
-
-def valid_cluster_type?(cluster_type)
-  e__array_value_exist?(CLUSTER_TYPES, cluster_type)
-end
-
-def cluster_type_shortname(cluster_type)
-  CLUSTER_TYPE_SHORTNAMES[cluster_type]
 end
 
 end
