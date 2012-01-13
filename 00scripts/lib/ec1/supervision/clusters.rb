@@ -249,7 +249,6 @@ def remote_execute()
         @remote_check_phase_system_done_ering_checked = true
       end
     end
-    ering_ini_install_done?
     sleep 20
   end
 
