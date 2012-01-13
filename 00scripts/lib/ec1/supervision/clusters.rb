@@ -204,8 +204,8 @@ end
 def certificates_create()
   root_00certificates_ini_ering_path = "#{@ec1_ini_ering_basedir}/dispatch/root/00certificates"
   mainuser_00certificates_ini_ering_path = "#{@ec1_ini_ering_basedir}/dispatch/mainuser/00certificates"
-  system "cd #{root_00certificates_ini_ering_path} ; echo 'ec1>>> generating root default ssh certificate' ; e.certificate_create ./ #{EC1_MACHINE_HOSTNAME}_#{EC1_ROOT_NAME}_v1 #{EC1_ROOT_SSH_DEFCERT_PASSCODE} -c"
-  system "cd #{mainuser_00certificates_ini_ering_path} ; echo 'ec1>>> generating mainuser default ssh certificate' ; e.certificate_create ./ #{EC1_MACHINE_HOSTNAME}_#{EC1_MAINUSER_NAME}_v1 #{EC1_MAINUSER_SSH_DEFCERT_PASSCODE} -c"
+  system "cd #{root_00certificates_ini_ering_path} ; echo 'ec1>>> generating root default ssh certificate #{EC1_ROOT_SSH_DEFCERT_PASSCODE}' ; e.certificate_create ./ #{EC1_MACHINE_HOSTNAME}_#{EC1_ROOT_NAME}_v1 #{EC1_ROOT_SSH_DEFCERT_PASSCODE} -c"
+  system "cd #{mainuser_00certificates_ini_ering_path} ; echo 'ec1>>> generating mainuser default ssh certificate #{EC1_MAINUSER_SSH_DEFCERT_PASSCODE}' ; e.certificate_create ./ #{EC1_MACHINE_HOSTNAME}_#{EC1_MAINUSER_NAME}_v1 #{EC1_MAINUSER_SSH_DEFCERT_PASSCODE} -c"
 end
 
 def project_cluster_ini_dir()
@@ -221,7 +221,7 @@ def remote_execute()
   remote_execute_command = "sshpass -p #{EC1_ROOT_TEMPPASS} e.. nc 'bash /root/#{@ec1_ini_ering_dir}/ering.#{@ering_current}' &"
   puts "#{e__datetime_sec} >>> starting remote phase_system (#{remote_execute_command})"
   system remote_execute_command
-  remote_check_phase_system_done_ering = "sshpass -p #{EC1_ROOT_TEMPPASS} ssh nc 'cat /root/#{@ec1_ini_ering_dir}/logs/ec1.ini.system.done.ering"
+  remote_check_phase_system_done_ering = "sshpass -p #{EC1_ROOT_TEMPPASS} ssh nc 'cat /root/#{@ec1_ini_ering_dir}/logs/ec1.ini.system.done.ering'"
   until remote_check_phase_system_done_ering == 'done'
     puts "#{e__datetime_sec} >>> checking remote_check_phase_system_done_ering (#{remote_check_phase_system_done_ering})"
     system remote_check_phase_system_done_ering
@@ -231,7 +231,7 @@ def remote_execute()
   puts "#{e__datetime_sec} >>> starting root_phase2 (#{remote_execute_command})"
   system remote_execute_command
   # checking system_ready
-  remote_check_system_ready_ering = "sshpass -p #{EC1_ROOT_TEMPPASS} ssh nc 'cat /home/#{EC1_MAINUSER_NAME}/.ec1.ini_user/ec1.ini.system.ready.ering"
+  remote_check_system_ready_ering = "sshpass -p #{EC1_ROOT_TEMPPASS} ssh nc 'cat /home/#{EC1_MAINUSER_NAME}/.ec1.ini_user/ec1.ini.system.ready.ering'"
   until remote_check_system_ready_ering == 'ready'
     puts "#{e__datetime_sec} >>> checking remote_check_system_ready_ering (#{remote_check_system_ready_ering})"
     system remote_check_system_ready_ering
