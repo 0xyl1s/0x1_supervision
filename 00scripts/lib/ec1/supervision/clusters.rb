@@ -27,7 +27,6 @@ include Ec1::Lib::Toolkit::Online
 
 def initialize(os, cluster_type, ering_version)
   # TODO: convert to ec1_lib method e__user_homedir
-  # TODO: check availability of the mandatory sshpass program
   @os = os
   abort "ERROR: invalid cluster_type (#{cluster_type}" unless valid_os?(os)
   @cluster_type = cluster_type if valid_cluster_type?(cluster_type)
@@ -209,7 +208,7 @@ end
 
 def remote_execute()
   until @rsync_command_executed
-    rsync_command = "sshpass -p#{EC1_ROOT_TEMPPASS} rsync -avh --no-o --no-g --stats --progress --rsh='ssh -p#{EC1_MACHINE_TEMP_SSH_PORT}' #{@ec1_ini_ering_basedir}/ root@#{EC1_MACHINE_TEMP_IP}:/root/#{@ec1_ini_ering_dir}/"
+    rsync_command = "rsync -avh --no-o --no-g --stats --progress --rsh='ssh -p#{EC1_MACHINE_TEMP_SSH_PORT}' #{@ec1_ini_ering_basedir}/ root@#{EC1_MACHINE_TEMP_IP}:/root/#{@ec1_ini_ering_dir}/"
     unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
       puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     else
@@ -221,7 +220,7 @@ def remote_execute()
   end
 
   # launching remote phase_system
-  ssh_root_temp_command = "sshpass -p#{EC1_ROOT_TEMPPASS} ssh -p#{EC1_MACHINE_TEMP_SSH_PORT} root@#{EC1_MACHINE_TEMP_IP}"
+  ssh_root_temp_command = "ssh -p#{EC1_MACHINE_TEMP_SSH_PORT} root@#{EC1_MACHINE_TEMP_IP}"
   ering_ini_ssh_root_phases_command = "#{ssh_root_temp_command} 'bash /root/#{@ec1_ini_ering_dir}/ering.#{@ering_current}'"
   until @ering_ini_ssh_root_phases_command_executed
     unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
