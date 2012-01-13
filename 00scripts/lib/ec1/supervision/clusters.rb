@@ -221,9 +221,9 @@ def remote_execute()
   end
 
   # launching remote phase_system
+  ssh_root_temp_command = "sshpass -p#{EC1_ROOT_TEMPPASS} ssh -p#{EC1_MACHINE_TEMP_SSH_PORT} root@#{EC1_MACHINE_TEMP_IP}"
   ering_ini_ssh_root_phases_command = "#{ssh_root_temp_command} 'bash /root/#{@ec1_ini_ering_dir}/ering.#{@ering_current}' &"
   until @ering_ini_ssh_root_phases_command_executed
-    ssh_root_temp_command = "sshpass -p#{EC1_ROOT_TEMPPASS} ssh -p#{EC1_MACHINE_TEMP_SSH_PORT} root@#{EC1_MACHINE_TEMP_IP}"
     if not e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
       puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     else
