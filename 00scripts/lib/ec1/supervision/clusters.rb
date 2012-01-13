@@ -50,10 +50,11 @@ def initialize(os, cluster_type, ering_version)
   @cluster_type = cluster_type if valid_cluster_type?(cluster_type)
   @cluster_type_shortname = cluster_type_shortname(@cluster_type)
   @ering_version = ering_version
+  @ering_current = "#{@cluster_type_shortname}#{@ering_version}"
   download_raw_install_ini_dir
-  puts "\n\nec1.cluster_ini_phase1 completed. When datafile is filled #{@ec1_ini_ering_data_filepath}, please run\n\ne.cluster_ini_ering.cc01.phase2\n\n"
+  puts "\n\nec1.cluster_ini_phase1 completed. When datafile is filled #{@ec1_ini_ering_data_filepath}, please run\n\ne.cluster_ini_ering.#{@ering_current}.phase2\n\n"
   %x"e #{@ec1_ini_ering_data_filepath}"
-  e__file_save_nl(e__datetime_sec, "#{@ec1_ini_ering_logsdir}/e.cluster_ini_ering.cc01.phase1.done")
+  e__file_save_nl(e__datetime_sec, "#{@ec1_ini_ering_logsdir}/e.cluster_ini_ering.#{@ering_current}.phase1.done")
   ClusterIniPhase2.new(@os, @cluster_type, @ering_version)
 end
 
@@ -69,9 +70,9 @@ def download_raw_install_ini_dir()
   abort "ERROR: can't access @ec1_ini_ering_basedir (#{@ec1_ini_ering_basedir})" unless e__is_a_dir?(@ec1_ini_ering_basedir)
   e__file_move("#{@ec1_supervision_new_cluster_basedir}/.ec1.ini.ering.tar", "#{@ec1_ini_ering_basedir}/")
   # downloading ering_ini_file
-  ering_uri = "https://raw.github.com/epiculture/ec1_supervision_templates/master/#{@os}/erings/#{@cluster_type}/ering.#{@cluster_type_shortname}#{@ering_version}"
+  ering_uri = "https://raw.github.com/epiculture/ec1_supervision_templates/master/#{@os}/erings/#{@cluster_type}/ering.#{@ering_current}"
   e__http_download_and_save(ering_uri, @ec1_ini_ering_basedir)
-  ering_ini_file = "#{@ec1_ini_ering_basedir}/ering.#{@cluster_type_shortname}#{@ering_version}"
+  ering_ini_file = "#{@ec1_ini_ering_basedir}/ering.#{@ering_current}"
   abort "ERROR: ering_ini file (#{ering_ini_file}) can't be downloaded from #{ering_uri}" unless e__is_a_file?(ering_ini_file)
   puts "dowloaded ering_ini_file (#{ering_ini_file}, from #{ering_uri})"
 end
@@ -94,11 +95,11 @@ class ClusterIniPhase2 < ClusterIni
 
 def initialize(os, cluster_type, ering_version)
   super
-  abort "ERROR: can't process ini phase1 done log file" unless e__is_a_file?("#{@ec1_ini_ering_logsdir}/e.cluster_ini_ering.cc01.phase1.done")
+  abort "ERROR: can't process ini phase1 done log file" unless e__is_a_file?("#{@ec1_ini_ering_logsdir}/e.cluster_ini_ering.#{@ering_current}.phase1.done")
   require @ec1_ini_ering_data_filepath
   dispatch_ini_ering_data
   certificates_create
-  e__file_save_nl(e__datetime_sec, "#{@ec1_ini_ering_logsdir}/e.cluster_ini_ering.cc01.phase2.done")
+  e__file_save_nl(e__datetime_sec, "#{@ec1_ini_ering_logsdir}/e.cluster_ini_ering.#{@ering_current}.phase2.done")
   project_cluster_ini_dir
   remote_execute
 end
@@ -207,10 +208,9 @@ def project_cluster_ini_dir()
 end
 
 def remote_execute()
-  remote_execute_command_phase1 = "e.. nc 'bash .ec1.ini.ering/ering.cc01'"
+  remote_execute_command_phase2 = "sshpass-p #{EC1_ROOT_TEMPPASS} e.. nc 'bash /root/#{@ec1_ini_ering_dir}/ering.#{@ering_current}'"
   puts "#{e__datetime_sec} >>> remote phase1"
   system remote_execute_command_phase1
-  remote_execute_command_phase2 = "e.. -p#{EC1_MACHINE_SSH_PORT} #{EC1_MAINUSER_NAME}@nc 'bash .ec1.ini.ering/ering.cc01'"
   puts "#{e__datetime_sec} >>> remote phase2 will begin in 5 minutes"
   puts "... if stuck, launch:"
   puts remote_execute_command_phase2
