@@ -25,7 +25,9 @@ require 'ec1/lib/toolkit/online.rb'
 include Ec1::Lib::Toolkit::Online
 
 def initialize(os, cluster_type, ering_version)
-  @ec1_supervision_new_cluster_basedir = File.expand_path("~/.ec1.sup/cluster.new")
+  # TODO: convert to ec1_lib method e__user_homedir
+  ec1_user_homedir = File.expand_path("~")
+  @ec1_supervision_new_cluster_basedir = "#{ec1_user_homedir}/.ec1.sup/cluster.new"
   @ec1_ini_ering_basedir = "#{@ec1_supervision_new_cluster_basedir}/.ec1.ini.ering"
   @ec1_ini_ering_data_filepath = "#{@ec1_ini_ering_basedir}/.ec1.ini.ering.data.rb"
 end
@@ -36,14 +38,14 @@ class ClusterIniPhase1 < ClusterIni
 
 def initialize(os, cluster_type, ering_version)
   super
+  e__mkdir_p(@ec1_supervision_new_cluster_basedir) unless e__is_a_dir?(@ec1_supervision_new_cluster_basedir)
+  abort "ERROR: can't access neither create supervision basedir (#{@ec1_supervision_new_cluster_basedir})" unless e__is_a_dir?(@ec1_supervision_new_cluster_basedir)
+  abort "ERROR: when starting new cluster installation, ec1_supervision_new_cluster_basedir should be empty (#{@ec1_supervision_new_cluster_basedir})" unless e__dir_is_empty?(@ec1_supervision_new_cluster_basedir)
   abort "ERROR: invalid os type (#{os}" unless valid_os?(os)
   @os = os
   abort "ERROR: invalid cluster_type (#{cluster_type}" unless valid_os?(os)
   @cluster_type = cluster_type if valid_cluster_type?(cluster_type)
   @cluster_type_shortname = cluster_type_shortname(@cluster_type)
-  abort "ERROR: when starting new cluster installation, ec1_supervision_new_cluster_basedir should be empty (#{@ec1_supervision_new_cluster_basedir})" unless e__dir_is_empty?(@ec1_supervision_new_cluster_basedir)
-  e__mkdir_p(@ec1_supervision_new_cluster_basedir) unless e__is_a_dir?(@ec1_supervision_new_cluster_basedir)
-  abort "ERROR: can't access neither create supervision basedir (#{@ec1_supervision_new_cluster_basedir})" unless e__is_a_dir?(@ec1_supervision_new_cluster_basedir)
   @ering_version = ering_version
   download_raw_install_ini_dir
   puts "\n\nec1.cluster_ini_phase1 completed. When datafile is filled #{@ec1_ini_ering_data_filepath}, please run\n\ne.cluster_ini_ering.cc01.phase2\n\n"
