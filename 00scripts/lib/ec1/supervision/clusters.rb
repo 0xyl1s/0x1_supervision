@@ -100,6 +100,7 @@ def initialize(os, cluster_type, ering_version)
   certificates_create
   e__file_save_nl(e__datetime_sec, "#{@ec1_ini_ering_logsdir}/e.cluster_ini_ering.cc01.phase2.done")
   project_cluster_ini_dir
+  remote_execute
 end
 
 def dispatch_ini_ering_data()
@@ -203,6 +204,18 @@ def project_cluster_ini_dir()
   rsync_command = "rsync -avh --no-o --no-g --stats --progress #{@ec1_ini_ering_basedir}/ nc:/root/#{@ec1_ini_ering_dir}/"
   puts rsync_command
   system rsync_command
+end
+
+def remote_execute()
+  remote_execute_command_phase1 = "e.. nc 'bash .ec1.ini.ering/ering.cc01'"
+  puts "#{e__datetime_sec} >>> remote phase1"
+  system remote_execute_command_phase1
+  remote_execute_command_phase2 = "e.. -p#{EC1_MACHINE_SSH_PORT} #{EC1_MAINUSER_NAME}@nc 'bash .ec1.ini.ering/ering.cc01'"
+  puts "#{e__datetime_sec} >>> remote phase2 will begin in 5 minutes"
+  puts "... if stuck, launch:"
+  puts remote_execute_command_phase2
+  sleep 300
+  system remote_execute_command_phase2
 end
 
 end
