@@ -241,8 +241,7 @@ def remote_execute()
       puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     else
       puts "#{e__datetime_sec} >>> checking remote_check_phase_system_done_ering_command\n#{remote_check_phase_system_done_ering_command}"
-      remote_check_phase_system_done_ering = system(remote_check_phase_system_done_ering_command)
-      next unless remote_check_phase_system_done_ering
+      remote_check_phase_system_done_ering = system(remote_check_phase_system_done_ering_command).to_s
       puts "EC1DEBUG: #{remote_check_phase_system_done_ering.class}"
       puts "EC1DEBUG: #{remote_check_phase_system_done_ering.size}"
       puts "EC1DEBUG: #{remote_check_phase_system_done_ering.chomp.size}"
@@ -254,8 +253,8 @@ def remote_execute()
         @remote_check_phase_system_done_ering_checked = true
       end
     end
-    remote_checking_system_ready
     sleep 20
+    #remote_checking_system_ready
   end
 end
 
