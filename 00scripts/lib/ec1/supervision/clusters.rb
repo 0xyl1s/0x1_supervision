@@ -25,15 +25,44 @@ include Ec1::Lib::Toolkit::Standard
 require 'ec1/lib/toolkit/online.rb'
 include Ec1::Lib::Toolkit::Online
 
+# TODO: convert to ec1_lib method e__user_homedir
+def e__user_homedir
+  File.expand_path("~")
+end
+ec1sup_ssh_pub_key_file = "#{e__user_homedir}/.ssh/id_rsa.pub"
+abort "EC1ERROR: can't access ec1sup_ssh_pub_key_file (#{ec1sup_ssh_pub_key_file})" unless e__is_a_file?(ec1sup_ssh_pub_key_file) or e__is_a_symlink?(ec1sup_ssh_pub_key_file)
+ec1sup_ssh_pub_key = e__file_read(ec1sup_ssh_pub_key_file)
+
+SSH_COMMAND_INITIAL_AUTHORIZED_KEYS = <<EC1HEREDOC
+#!/usr/bin/env bash
+sup_ssh_pubkey="#{ec1sup_ssh_pub_key}"
+
+user_home_dir=$(cd ~ ; pwd)
+user_ssh_dir="${user_home_dir}/.ssh"
+echo "${user_ssh_dir}"
+if [[ -d "${user_ssh_dir}" ]]
+then
+    echo "${user_ssh_dir}"
+    mv "${user_ssh_dir}" "${user_ssh_dir}.ini"
+    echo "moving initial ssh dir"
+fi
+mkdir ${user_ssh_dir}
+chmod 700 ${user_ssh_dir}
+user_authorized_keys_file="${user_ssh_dir}/authorized_keys"
+echo ${sup_ssh_pubkey} > ${user_authorized_keys_file}
+chmod 600 ${user_authorized_keys_file}
+ls -al ${user_ssh_dir}
+# vim: ft=sh
+EC1HEREDOC
+
 def initialize(os, cluster_type, ering_version)
-  # TODO: convert to ec1_lib method e__user_homedir
   @os = os
   abort "ERROR: invalid cluster_type (#{cluster_type}" unless valid_os?(os)
   @cluster_type = cluster_type if valid_cluster_type?(cluster_type)
   @cluster_type_shortname = cluster_type_shortname(@cluster_type)
   @ering_version = ering_version
   @ering_current = "#{@cluster_type_shortname}#{@ering_version}"
-  ec1_user_homedir = File.expand_path("~")
+  ec1_user_homedir = e__user_homedir
   @ec1_supervision_new_cluster_basedir = "#{ec1_user_homedir}/.ec1.sup/cluster.new"
   @ec1_ini_ering_dir = ".ec1.ini.ering"
   @ec1_ini_ering_basedir = "#{@ec1_supervision_new_cluster_basedir}/#{@ec1_ini_ering_dir}"
@@ -209,6 +238,8 @@ end
 
 def remote_execute()
   ec1debug = true
+  puts SSH_COMMAND_INITIAL_AUTHORIZED_KEYS
+  abort
   until @rsync_command_executed
     rsync_command = "rsync -avh --no-o --no-g --stats --progress --rsh='ssh -p#{EC1_MACHINE_TEMP_SSH_PORT}' #{@ec1_ini_ering_basedir}/ root@#{EC1_MACHINE_TEMP_IP}:/root/#{@ec1_ini_ering_dir}/"
     if e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
@@ -244,7 +275,7 @@ def remote_execute()
       remote_check_phase_system_done_ering = %x"#{remote_check_phase_system_done_ering_command}"
       if remote_check_phase_system_done_ering.chomp == 'done'
         puts "\n\n#{@ec1_log_prefix} ering_ini_phase_system: DONE\n"
-        puts "#{@ec1_log_prefix} starting root_phase: please run >>>>>\n#{ering_ini_ssh_root_phases_command}\n\n"
+        puts "#{@ec1_log_prefix} starting root_phase: please run >>>>>\n\n#{ering_ini_ssh_root_phases_command}\n\n"
         @remote_check_phase_system_done_ering_checked = true
       end
     else
