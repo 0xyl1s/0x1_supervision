@@ -18,6 +18,30 @@ CLUSTER_TYPE_SHORTNAMES = {
                           'cluster.leaf' => 'cf'
                           }
 
+
+RAW_SSH_COMMAND_INITIAL_AUTHORIZED_KEYS = <<EC1HEREDOC
+#!/usr/bin/env bash
+sup_ssh_pubkey="@@_ec1_sup_ssh_pubkey_@@"
+
+user_home_dir=$(cd ~ ; pwd)
+user_ssh_dir="${user_home_dir}/.ssh"
+echo "${user_ssh_dir}"
+if [[ -d "${user_ssh_dir}" ]]
+then
+    echo "${user_ssh_dir}"
+    mv "${user_ssh_dir}" "${user_ssh_dir}.ini"
+    echo "moving initial ssh dir"
+fi
+mkdir ${user_ssh_dir}
+chmod 700 ${user_ssh_dir}
+user_authorized_keys_file="${user_ssh_dir}/authorized_keys"
+echo ${sup_ssh_pubkey} > ${user_authorized_keys_file}
+chmod 600 ${user_authorized_keys_file}
+ls -al ${user_ssh_dir}
+# vim: ft=sh
+EC1HEREDOC
+
+
 # TODO: merge phases 1 and 2 classes into main ClusterIni class
 class ClusterIni
 require 'ec1/lib/toolkit/standard.rb'
@@ -209,32 +233,18 @@ def certificates_create()
   system "cd #{mainuser_00certificates_ini_ering_path} ; echo '#{@ec1_log_prefix} generating mainuser default ssh certificate #{EC1_MAINUSER_SSH_DEFCERT_PASSCODE}' ; e.certificate_create ./ #{EC1_MACHINE_HOSTNAME}_#{EC1_MAINUSER_NAME}_v1 #{EC1_MAINUSER_SSH_DEFCERT_PASSCODE} -c"
 end
 
+# TODO: move to ec1_lib
+def e__content_replace(s_content, s_search_regex, s_replace_value)
+  s_content.sub(/#{s_search_regex}/, s_replace_value)
+end
+
 def remote_execute()
   ec1debug = true
-
-SSH_COMMAND_INITIAL_AUTHORIZED_KEYS = <<EC1HEREDOC
-#!/usr/bin/env bash
-sup_ssh_pubkey="#{@ec1sup_ssh_pub_key}"
-
-user_home_dir=$(cd ~ ; pwd)
-user_ssh_dir="${user_home_dir}/.ssh"
-echo "${user_ssh_dir}"
-if [[ -d "${user_ssh_dir}" ]]
-then
-    echo "${user_ssh_dir}"
-    mv "${user_ssh_dir}" "${user_ssh_dir}.ini"
-    echo "moving initial ssh dir"
-fi
-mkdir ${user_ssh_dir}
-chmod 700 ${user_ssh_dir}
-user_authorized_keys_file="${user_ssh_dir}/authorized_keys"
-echo ${sup_ssh_pubkey} > ${user_authorized_keys_file}
-chmod 600 ${user_authorized_keys_file}
-ls -al ${user_ssh_dir}
-# vim: ft=sh
-EC1HEREDOC
-
-  puts SSH_COMMAND_INITIAL_AUTHORIZED_KEYS
+  puts RAW_SSH_COMMAND_INITIAL_AUTHORIZED_KEYS
+  @ec1sup_ssh_pub_key
+  ec1_sup_ssh_pubkey_dummy = "@@_ec1_sup_ssh_pubkey_@@"
+  puts ec1_sup_ssh_pubkey_dummy
+  ssh_command_initial_authorized_keys = e__content_replace(RAW_SSH_COMMAND_INITIAL_AUTHORIZED_KEYS, ec1_sup_ssh_pubkey_dummy, @ec1sup_ssh_pub_key)
   abort
   until @rsync_command_executed
     rsync_command = "rsync -avh --no-o --no-g --stats --progress --rsh='ssh -p#{EC1_MACHINE_TEMP_SSH_PORT}' #{@ec1_ini_ering_basedir}/ root@#{EC1_MACHINE_TEMP_IP}:/root/#{@ec1_ini_ering_dir}/"
