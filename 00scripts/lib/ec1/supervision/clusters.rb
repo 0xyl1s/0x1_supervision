@@ -208,6 +208,7 @@ def certificates_create()
 end
 
 def remote_execute()
+  ec1debug = true
   until @rsync_command_executed
     rsync_command = "rsync -avh --no-o --no-g --stats --progress --rsh='ssh -p#{EC1_MACHINE_TEMP_SSH_PORT}' #{@ec1_ini_ering_basedir}/ root@#{EC1_MACHINE_TEMP_IP}:/root/#{@ec1_ini_ering_dir}/"
     if e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
@@ -236,13 +237,14 @@ def remote_execute()
   remote_check_phase_system_done_ering_command = "#{ssh_root_temp_command} 'cat /root/#{@ec1_ini_ering_dir}/logs/ec1.ini.system.done.ering 2>/dev/null'"
   until defined? @remote_check_phase_system_done_ering_checked
     break if defined? @remote_check_system_ready_checked
-    puts "EC1DEBUG>>> defined? @remote_check_system_ready_checked => #{(defined? @remote_check_system_ready_checked).class}"
+    puts "EC1DEBUG>>> defined? @remote_check_system_ready_checked => #{(defined? @remote_check_system_ready_checked).class}" if ec1debug
     if e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
-      puts " #{@ec1_log_prefix}checking remote_check_phase_system_done_ering_command\n#{remote_check_phase_system_done_ering_command}"
+      puts "#{@ec1_log_prefix}checking remote_check_phase_system_done_ering_command"
+      puts "#{remote_check_phase_system_done_ering_command}" if ec1debug
       remote_check_phase_system_done_ering = %x"#{remote_check_phase_system_done_ering_command}"
       if remote_check_phase_system_done_ering.chomp == 'done'
         puts "\n\n#{@ec1_log_prefix} ering_ini_phase_system: DONE\n"
-        puts "#{@ec1_log_prefix} starting root_phase: please run\n\n#{ering_ini_ssh_root_phases_command}\n\n"
+        puts "#{@ec1_log_prefix} starting root_phase: please run >>>>>\n#{ering_ini_ssh_root_phases_command}\n\n"
         @remote_check_phase_system_done_ering_checked = true
       end
     else
@@ -259,17 +261,21 @@ def remote_execute()
 end
 
 def remote_checking_system_ready(verbose=true)
+  ec1debug = true
   # checking system_ready
   ssh_mainuser_command = "ssh -p#{EC1_MACHINE_SSH_PORT} -o PasswordAuthentication=no -o ConnectTimeout=5 #{EC1_MAINUSER_NAME}@#{EC1_MACHINE_TEMP_IP}"
   remote_check_system_ready_command = "#{ssh_mainuser_command} 'cat /home/#{EC1_MAINUSER_NAME}/.ec1.ini_user/ec1.ini.system.ready.ering 2>/dev/null'"
-  puts "#{@ec1_log_prefix} checking remote_check_system_ready_command\n#{remote_check_system_ready_command}" if verbose
+  puts "#{@ec1_log_prefix} checking remote_check_system_ready_command" if verbose
+  puts "#{remote_check_system_ready_command}" if verbose and ec1debug
   if e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_SSH_PORT) then
     remote_check_system_ready = %x"#{remote_check_system_ready_command}"
     if remote_check_system_ready == 'ready'
       @remote_check_system_ready_checked = true
     end
   else
-    puts "#{@ec1_log_prefix} checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_SSH_PORT}: UNAVAILABLE4" if verbose
+    unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
+      puts "#{@ec1_log_prefix} checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_SSH_PORT}: UNAVAILABLE4" if verbose
+    end
   end
 end
 
