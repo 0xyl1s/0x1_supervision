@@ -25,11 +25,7 @@ include Ec1::Lib::Toolkit::Standard
 require 'ec1/lib/toolkit/online.rb'
 include Ec1::Lib::Toolkit::Online
 
-# TODO: convert to ec1_lib method e__user_homedir
-def e__user_homedir
-  File.expand_path("~")
-end
-ec1sup_ssh_pub_key_file = "#{e__user_homedir}/.ssh/id_rsa.pub"
+ec1sup_ssh_pub_key_file = "#{@ec1_user_homedir}/.ssh/id_rsa.pub"
 abort "EC1ERROR: can't access ec1sup_ssh_pub_key_file (#{ec1sup_ssh_pub_key_file})" unless e__is_a_file?(ec1sup_ssh_pub_key_file) or e__is_a_symlink?(ec1sup_ssh_pub_key_file)
 ec1sup_ssh_pub_key = e__file_read(ec1sup_ssh_pub_key_file)
 
@@ -62,7 +58,7 @@ def initialize(os, cluster_type, ering_version)
   @cluster_type_shortname = cluster_type_shortname(@cluster_type)
   @ering_version = ering_version
   @ering_current = "#{@cluster_type_shortname}#{@ering_version}"
-  ec1_user_homedir = e__user_homedir
+  @ec1_user_homedir = e__user_homedir
   @ec1_supervision_new_cluster_basedir = "#{ec1_user_homedir}/.ec1.sup/cluster.new"
   @ec1_ini_ering_dir = ".ec1.ini.ering"
   @ec1_ini_ering_basedir = "#{@ec1_supervision_new_cluster_basedir}/#{@ec1_ini_ering_dir}"
