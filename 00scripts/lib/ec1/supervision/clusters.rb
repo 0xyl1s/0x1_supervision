@@ -256,14 +256,14 @@ def remote_execute()
 
   # launching remote phase_system
   ssh_root_temp_command = "ssh -p#{EC1_MACHINE_TEMP_SSH_PORT} -o ConnectTimeout=15 root@#{EC1_MACHINE_TEMP_IP}"
-  ering_ini_ssh_root_phases_command = "#{ssh_root_temp_command} bash /root/#{@ec1_ini_ering_dir}/ering.#{@ering_current}"
+  terminal_ering_ini_ssh_root_phases_command = "urxvt -e #{ssh_root_temp_command} bash /root/#{@ec1_ini_ering_dir}/ering.#{@ering_current}"
   until @ering_ini_ssh_root_phases_command_executed
     if e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
-      puts "#{@ec1_log_prefix} starting remote phase_system installation: \n#{ering_ini_ssh_root_phases_command}\n\n"
+      puts "#{@ec1_log_prefix} starting remote phase_system installation: \n#{terminal_ering_ini_ssh_root_phases_command}\n\n"
       puts "#{@ec1_log_prefix} to follow the main live log, run: \n#{ssh_root_temp_command} tail -f '\~/.ec1.ini.ering/logs/ec1.ini.system.ering'\n\n"
       #test_command = "#{ssh_root_temp_command} ls -al /root \\; sleep 5"
       #system "urxvt -e #{test_command}"
-      abort "ERROR running command:\n#{ering_ini_ssh_root_phases_command}" unless system "urxvt -e '#{ering_ini_ssh_root_phases_command}'"
+      abort "ERROR running command:\n#{terminal_ering_ini_ssh_root_phases_command}" unless system "#{terminal_ering_ini_ssh_root_phases_command}"
       @ering_ini_ssh_root_phases_command_executed = true
     else
       puts "#{@ec1_log_prefix}>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
@@ -282,9 +282,9 @@ def remote_execute()
       remote_check_phase_system_done_ering = %x"#{remote_check_phase_system_done_ering_command}"
       if remote_check_phase_system_done_ering.chomp == 'done'
         puts "\n\n#{@ec1_log_prefix} ering_ini_phase_system: DONE\n"
-        puts "#{@ec1_log_prefix} starting root_phase: \n#{ering_ini_ssh_root_phases_command}\n\n"
+        puts "#{@ec1_log_prefix} starting root_phase: \n#{terminal_ering_ini_ssh_root_phases_command}\n\n"
         puts "#{@ec1_log_prefix} to follow the main live log, run: \n#{ssh_root_temp_command} tail -f '\~/.ec1.ini.ering/logs/ec1.ini.root_phase2.ering'\n\n"
-        #%x"#{ering_ini_ssh_root_phases_command}"
+        #%x"#{terminal_ering_ini_ssh_root_phases_command}"
         @remote_check_phase_system_done_ering_checked = true
       end
     else
