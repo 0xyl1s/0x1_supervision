@@ -38,7 +38,6 @@ user_authorized_keys_file="${user_ssh_dir}/authorized_keys"
 echo ${sup_ssh_pubkey} > ${user_authorized_keys_file}
 chmod 600 ${user_authorized_keys_file}
 ls -al ${user_ssh_dir}
-# vim: ft=sh
 EC1HEREDOC
 
 
@@ -233,17 +232,12 @@ def certificates_create()
   system "cd #{mainuser_00certificates_ini_ering_path} ; echo '#{@ec1_log_prefix} generating mainuser default ssh certificate #{EC1_MAINUSER_SSH_DEFCERT_PASSCODE}' ; e.certificate_create ./ #{EC1_MACHINE_HOSTNAME}_#{EC1_MAINUSER_NAME}_v1 #{EC1_MAINUSER_SSH_DEFCERT_PASSCODE} -c"
 end
 
-# TODO: move to ec1_lib
-def e__content_replace(s_content, s_search_regex, s_replace_value)
-  s_content.sub(/#{s_search_regex}/, s_replace_value)
-end
-
 def remote_execute()
   ec1debug = true
   ec1_sup_ssh_pubkey_dummy = "@@_ec1_sup_ssh_pubkey_@@"
   ssh_command_initial_authorized_keys = e__content_replace(RAW_SSH_COMMAND_INITIAL_AUTHORIZED_KEYS, ec1_sup_ssh_pubkey_dummy, @ec1sup_ssh_pub_key)
   transfert_sup_ssh_pubkey_command = "echo \"#{ssh_command_initial_authorized_keys}\" | ssh -p#{EC1_MACHINE_TEMP_SSH_PORT} root@#{EC1_MACHINE_TEMP_IP} bash"
-  puts transfert_sup_ssh_pubkey_command
+  system transfert_sup_ssh_pubkey_command
   abort
   until @rsync_command_executed
     rsync_command = "rsync -avh --no-o --no-g --stats --progress --rsh='ssh -p#{EC1_MACHINE_TEMP_SSH_PORT}' #{@ec1_ini_ering_basedir}/ root@#{EC1_MACHINE_TEMP_IP}:/root/#{@ec1_ini_ering_dir}/"
