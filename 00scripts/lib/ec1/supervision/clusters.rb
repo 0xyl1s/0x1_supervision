@@ -243,10 +243,10 @@ def remote_execute()
   transfert_sup_ssh_pubkey_command = "echo \'#{ssh_command_initial_authorized_keys}\' | ssh -p#{EC1_MACHINE_TEMP_SSH_PORT} root@#{EC1_MACHINE_TEMP_IP} bash"
   puts transfert_sup_ssh_pubkey_command
   puts "#{@ec1_log_prefix} transfering Supervision user's ssh pubkey"
-  system transfert_sup_ssh_pubkey_command
       system "/usr/bin/xcalc"
       system "/usr/bin/urxvt"
       abort
+  system transfert_sup_ssh_pubkey_command
   until @rsync_command_executed
     rsync_command = "rsync -avh --no-o --no-g --stats --progress --rsh='ssh -p#{EC1_MACHINE_TEMP_SSH_PORT}' #{@ec1_ini_ering_basedir}/ root@#{EC1_MACHINE_TEMP_IP}:/root/#{@ec1_ini_ering_dir}/"
     if e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
