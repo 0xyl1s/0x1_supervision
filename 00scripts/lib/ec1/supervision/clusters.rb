@@ -246,7 +246,7 @@ def remote_execute()
       puts "#{@ec1_log_prefix} command: #{rsync_command}"
       @rsync_command_executed = true if system rsync_command
     else
-      puts "#{@ec1_log_prefix} checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE1"
+      puts "#{@ec1_log_prefix} checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     end
   end
 
@@ -256,10 +256,11 @@ def remote_execute()
   ering_ini_ssh_root_phases_command = "#{ssh_root_temp_command_interactive} 'bash /root/#{@ec1_ini_ering_dir}/ering.#{@ering_current}'"
   until @ering_ini_ssh_root_phases_command_executed
     if e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
-      puts "#{@ec1_log_prefix} starting remote phase_system installation: please run\n\n#{ering_ini_ssh_root_phases_command}\n\n"
+      puts "#{@ec1_log_prefix} starting remote phase_system installation: \n#{ering_ini_ssh_root_phases_command}\n\n"
+      system ering_ini_ssh_root_phases_command
       @ering_ini_ssh_root_phases_command_executed = true
     else
-      puts "#{@ec1_log_prefix}>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE2"
+      puts "#{@ec1_log_prefix}>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     end
     sleep 20
   end
@@ -275,11 +276,12 @@ def remote_execute()
       remote_check_phase_system_done_ering = %x"#{remote_check_phase_system_done_ering_command}"
       if remote_check_phase_system_done_ering.chomp == 'done'
         puts "\n\n#{@ec1_log_prefix} ering_ini_phase_system: DONE\n"
-        puts "#{@ec1_log_prefix} starting root_phase: please run >>>>>\n\n#{ering_ini_ssh_root_phases_command}\n\n"
+        puts "#{@ec1_log_prefix} starting root_phase: \n#{ering_ini_ssh_root_phases_command}\n\n"
+        system ering_ini_ssh_root_phases_command
         @remote_check_phase_system_done_ering_checked = true
       end
     else
-      puts "#{@ec1_log_prefix} checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE3"
+      puts "#{@ec1_log_prefix} checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     end
     sleep 20
     remote_checking_system_ready(false)
@@ -305,7 +307,7 @@ def remote_checking_system_ready(verbose=true)
     end
   else
     unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
-      puts "#{@ec1_log_prefix} checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_SSH_PORT}: UNAVAILABLE4" if verbose
+      puts "#{@ec1_log_prefix} checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_SSH_PORT}: UNAVAILABLE" if verbose
     end
   end
 end
