@@ -212,9 +212,8 @@ def remote_execute()
     unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
       puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     else
-      puts rsync_command
-      system rsync_command
-      @rsync_command_executed = true
+      puts "ec1>>> command: #{rsync_command}"
+      @rsync_command_executed = true if system rsync_command
     end
     sleep 10
   end
