@@ -263,7 +263,6 @@ def remote_execute()
       puts "#{@ec1_log_prefix} to follow the main live log, run: \n#{ssh_root_temp_command} tail -f '\~/.ec1.ini.ering/logs/ec1.ini.system.ering'\n\n"
       #test_command = "#{ssh_root_temp_command} ls -al /root \\; sleep 5"
       #system "urxvt -e #{test_command}"
-      system "xcalc"
       abort "ERROR running command:\n#{terminal_ering_ini_ssh_root_phases_command}" unless system "#{terminal_ering_ini_ssh_root_phases_command}"
       @ering_ini_ssh_root_phases_command_executed = true
     else
@@ -285,7 +284,7 @@ def remote_execute()
         puts "\n\n#{@ec1_log_prefix} ering_ini_phase_system: DONE\n"
         puts "#{@ec1_log_prefix} starting root_phase: \n#{terminal_ering_ini_ssh_root_phases_command}\n\n"
         puts "#{@ec1_log_prefix} to follow the main live log, run: \n#{ssh_root_temp_command} tail -f '\~/.ec1.ini.ering/logs/ec1.ini.root_phase2.ering'\n\n"
-        #%x"#{terminal_ering_ini_ssh_root_phases_command}"
+        abort "ERROR running command:\n#{terminal_ering_ini_ssh_root_phases_command}" unless system "#{terminal_ering_ini_ssh_root_phases_command}"
         @remote_check_phase_system_done_ering_checked = true
       end
     else
