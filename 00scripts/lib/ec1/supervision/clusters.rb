@@ -219,7 +219,8 @@ def remote_execute()
 
   # launching remote phase_system
   ssh_root_temp_command = "ssh -p#{EC1_MACHINE_TEMP_SSH_PORT} -o PasswordAuthentication=no -o ConnectTimeout=5 root@#{EC1_MACHINE_TEMP_IP}"
-  ering_ini_ssh_root_phases_command = "#{ssh_root_temp_command} 'bash /root/#{@ec1_ini_ering_dir}/ering.#{@ering_current}'"
+  ssh_root_temp_command_interactive = "ssh -p#{EC1_MACHINE_TEMP_SSH_PORT} -o ConnectTimeout=15 root@#{EC1_MACHINE_TEMP_IP}"
+  ering_ini_ssh_root_phases_command = "#{ssh_root_temp_command_interactive} 'bash /root/#{@ec1_ini_ering_dir}/ering.#{@ering_current}'"
   until @ering_ini_ssh_root_phases_command_executed
     unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
       puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
@@ -227,7 +228,7 @@ def remote_execute()
       puts "#{e__datetime_sec} >>> starting remote phase_system installation: please run\n\n#{ering_ini_ssh_root_phases_command}\n\n"
       @ering_ini_ssh_root_phases_command_executed = true
     end
-    sleep 10
+    sleep 20
   end
 
   # launching remote phase_root
