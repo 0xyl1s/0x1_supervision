@@ -26,9 +26,9 @@ sup_ssh_pubkey="@@_ec1_sup_ssh_pubkey_@@"
 user_home_dir=$(cd ~ ; pwd)
 user_ssh_dir="${user_home_dir}/.ssh"
 if [[ -d "${user_ssh_dir}.ering_ini" ]]
+then
     echo "ERROR: directory ${user_ssh_dir}.ering_ini exists already"
     exit 1
-then
 fi
 if [[ -d "${user_ssh_dir}" ]]
 then
