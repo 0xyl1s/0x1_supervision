@@ -244,7 +244,7 @@ def remote_execute()
   puts transfert_sup_ssh_pubkey_command
   puts "#{@ec1_log_prefix} transfering Supervision user's ssh pubkey"
   test_command = "e.. nc ls -al /root \; sleep 5"
-      system "/usr/bin/urxvt -e \'ssh nc touch /root/.bou\'"
+      system "urxvt -e ssh nc ls -al /root/ \; sleep 5"
       #system "/usr/bin/urxvt -e \'#{test_command}\'"
       abort
   system transfert_sup_ssh_pubkey_command
