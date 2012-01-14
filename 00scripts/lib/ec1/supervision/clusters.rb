@@ -241,7 +241,7 @@ def remote_execute()
       puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     else
       puts "#{e__datetime_sec} >>> checking remote_check_phase_system_done_ering_command\n#{remote_check_phase_system_done_ering_command}"
-      remote_check_phase_system_done_ering = %x(remote_check_phase_system_done_ering_command).to_s
+      remote_check_phase_system_done_ering = %x"#{remote_check_phase_system_done_ering_command}"
       puts "EC1DEBUG: #{remote_check_phase_system_done_ering.class} (size = #{remote_check_phase_system_done_ering.size}/ chomped: #{remote_check_phase_system_done_ering.chomp.size}) : #{remote_check_phase_system_done_ering}"
       if remote_check_phase_system_done_ering.chomp == 'done'
         puts "#{e__datetime_sec} >>> ering_ini_phase_system: DONE"
@@ -265,7 +265,7 @@ def remote_checking_system_ready()
       puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     else
       puts "#{e__datetime_sec} >>> checking remote_check_system_ready_command\n#{remote_check_system_ready_command}"
-      remote_check_system_ready = %x(remote_check_system_ready_command)
+      remote_check_system_ready = %x"#{remote_check_system_ready_command}"
       if remote_check_system_ready == 'ready'
         @remote_check_system_ready_checked = true
       end
