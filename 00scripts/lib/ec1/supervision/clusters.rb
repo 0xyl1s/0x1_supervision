@@ -243,10 +243,6 @@ def remote_execute()
   transfert_sup_ssh_pubkey_command = "echo \'#{ssh_command_initial_authorized_keys}\' | ssh -p#{EC1_MACHINE_TEMP_SSH_PORT} root@#{EC1_MACHINE_TEMP_IP} bash"
   puts transfert_sup_ssh_pubkey_command
   puts "#{@ec1_log_prefix} transfering Supervision user's ssh pubkey"
-  test_command = "e.. nc ls -al /root \; sleep 5"
-      system "urxvt -e ssh nc ls -al /root/ \\; sleep 5"
-      #system "/usr/bin/urxvt -e \'#{test_command}\'"
-      abort
   system transfert_sup_ssh_pubkey_command
   until @rsync_command_executed
     rsync_command = "rsync -avh --no-o --no-g --stats --progress --rsh='ssh -p#{EC1_MACHINE_TEMP_SSH_PORT}' #{@ec1_ini_ering_basedir}/ root@#{EC1_MACHINE_TEMP_IP}:/root/#{@ec1_ini_ering_dir}/"
@@ -265,6 +261,9 @@ def remote_execute()
     if e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
       puts "#{@ec1_log_prefix} starting remote phase_system installation: \n#{ering_ini_ssh_root_phases_command}\n\n"
       puts "#{@ec1_log_prefix} to follow the main live log, run: \n#{ssh_root_temp_command} tail -f '\~/.ec1.ini.ering/logs/ec1.ini.system.ering'\n\n"
+      test_command = "#{ssh_root_temp_command} ls -al /root \\; sleep 5"
+      system "urxvt -e #{test_command}"
+      abort
       %x"urxvt -e '#{ering_ini_ssh_root_phases_command}'"
       @ering_ini_ssh_root_phases_command_executed = true
     else
