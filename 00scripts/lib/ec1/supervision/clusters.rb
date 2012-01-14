@@ -240,7 +240,6 @@ def remote_execute()
     else
       puts "#{e__datetime_sec} >>> checking remote_check_phase_system_done_ering_command\n#{remote_check_phase_system_done_ering_command}"
       remote_check_phase_system_done_ering = %x"#{remote_check_phase_system_done_ering_command}"
-      puts "EC1DEBUG: #{remote_check_phase_system_done_ering.class} (size = #{remote_check_phase_system_done_ering.size}/ chomped: #{remote_check_phase_system_done_ering.chomp.size}) : #{remote_check_phase_system_done_ering}"
       if remote_check_phase_system_done_ering.chomp == 'done'
         puts "\n\n#{e__datetime_sec} >>> ering_ini_phase_system: DONE\n"
         puts "#{e__datetime_sec} >>> starting root_phase: please run\n\n#{ering_ini_ssh_root_phases_command}\n\n"
@@ -257,15 +256,13 @@ def remote_checking_system_ready()
   # checking system_ready
   ssh_mainuser_command = "ssh -p#{EC1_MACHINE_SSH_PORT} -o PasswordAuthentication=no -o ConnectTimeout=5 #{EC1_MAINUSER_NAME}@#{EC1_MACHINE_TEMP_IP}"
   remote_check_system_ready_command = "#{ssh_mainuser_command} 'cat /home/#{EC1_MAINUSER_NAME}/.ec1.ini_user/ec1.ini.system.ready.ering 2>/dev/null'"
-  until @remote_check_system_ready_checked
-    unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT) then
-      puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
-    else
-      puts "#{e__datetime_sec} >>> checking remote_check_system_ready_command\n#{remote_check_system_ready_command}"
-      remote_check_system_ready = %x"#{remote_check_system_ready_command}"
-      if remote_check_system_ready == 'ready'
-        @remote_check_system_ready_checked = true
-      end
+  unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT) then
+    puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
+  else
+    puts "#{e__datetime_sec} >>> checking remote_check_system_ready_command\n#{remote_check_system_ready_command}"
+    remote_check_system_ready = %x"#{remote_check_system_ready_command}"
+    if remote_check_system_ready == 'ready'
+      @remote_check_system_ready_checked = true
     end
   end
 end
