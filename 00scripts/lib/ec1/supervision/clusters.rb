@@ -218,7 +218,7 @@ def remote_execute()
   end
 
   # launching remote phase_system
-  ssh_root_temp_command = "ssh -p#{EC1_MACHINE_TEMP_SSH_PORT} root@#{EC1_MACHINE_TEMP_IP}"
+  ssh_root_temp_command = "ssh -p#{EC1_MACHINE_TEMP_SSH_PORT} -o PasswordAuthentication=no -o ConnectTimeout=5 root@#{EC1_MACHINE_TEMP_IP}"
   ering_ini_ssh_root_phases_command = "#{ssh_root_temp_command} 'bash /root/#{@ec1_ini_ering_dir}/ering.#{@ering_current}'"
   until @ering_ini_ssh_root_phases_command_executed
     unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
@@ -254,7 +254,7 @@ end
 
 def remote_checking_system_ready()
   # checking system_ready
-  ssh_mainuser_command = "ssh -p#{EC1_MACHINE_SSH_PORT} #{EC1_MAINUSER_NAME}@#{EC1_MACHINE_TEMP_IP}"
+  ssh_mainuser_command = "ssh -p#{EC1_MACHINE_SSH_PORT} -o PasswordAuthentication=no -o ConnectTimeout=5 #{EC1_MAINUSER_NAME}@#{EC1_MACHINE_TEMP_IP}"
   remote_check_system_ready_command = "#{ssh_mainuser_command} 'cat /home/#{EC1_MAINUSER_NAME}/.ec1.ini_user/ec1.ini.system.ready.ering 2>/dev/null'"
   until @remote_check_system_ready_checked
     unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT) then
