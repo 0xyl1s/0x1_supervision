@@ -25,11 +25,15 @@ sup_ssh_pubkey="@@_ec1_sup_ssh_pubkey_@@"
 
 user_home_dir=$(cd ~ ; pwd)
 user_ssh_dir="${user_home_dir}/.ssh"
-echo "${user_ssh_dir}"
+if [[ -d "${user_ssh_dir}.ering_ini" ]]
+    echo "ERROR: directory ${user_ssh_dir}.ering_ini exists already" 2>&1
+    exit 1
+then
+fi
 if [[ -d "${user_ssh_dir}" ]]
 then
     echo "${user_ssh_dir}"
-    mv "${user_ssh_dir}" "${user_ssh_dir}.ini"
+    mv "${user_ssh_dir}" "${user_ssh_dir}.ering_ini"
     echo "moving initial ssh dir"
 fi
 mkdir ${user_ssh_dir}
@@ -251,13 +255,12 @@ def remote_execute()
   end
 
   # launching remote phase_system
-  ssh_root_temp_command = "ssh -p#{EC1_MACHINE_TEMP_SSH_PORT} -o PasswordAuthentication=no -o ConnectTimeout=5 root@#{EC1_MACHINE_TEMP_IP}"
-  ssh_root_temp_command_interactive = "ssh -p#{EC1_MACHINE_TEMP_SSH_PORT} -o ConnectTimeout=15 root@#{EC1_MACHINE_TEMP_IP}"
-  ering_ini_ssh_root_phases_command = "#{ssh_root_temp_command_interactive} 'bash /root/#{@ec1_ini_ering_dir}/ering.#{@ering_current} &'"
+  ssh_root_temp_command = "ssh -p#{EC1_MACHINE_TEMP_SSH_PORT} -o ConnectTimeout=15 root@#{EC1_MACHINE_TEMP_IP}"
+  ering_ini_ssh_root_phases_command = "#{ssh_root_temp_command} /root/#{@ec1_ini_ering_dir}/ering.#{@ering_current}"
   until @ering_ini_ssh_root_phases_command_executed
     if e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
       puts "#{@ec1_log_prefix} starting remote phase_system installation: \n#{ering_ini_ssh_root_phases_command}\n\n"
-      puts "#{@ec1_log_prefix} to follow the main live log, run: \n#{ssh_root_temp_command_interactive} tail -f '\~/.ec1.ini.ering/logs/ec1.ini.system.ering'\n\n"
+      puts "#{@ec1_log_prefix} to follow the main live log, run: \n#{ssh_root_temp_command} tail -f '\~/.ec1.ini.ering/logs/ec1.ini.system.ering'\n\n"
       %x"urxvt -e '#{ering_ini_ssh_root_phases_command}'"
       @ering_ini_ssh_root_phases_command_executed = true
     else
@@ -278,7 +281,7 @@ def remote_execute()
       if remote_check_phase_system_done_ering.chomp == 'done'
         puts "\n\n#{@ec1_log_prefix} ering_ini_phase_system: DONE\n"
         puts "#{@ec1_log_prefix} starting root_phase: \n#{ering_ini_ssh_root_phases_command}\n\n"
-        puts "#{@ec1_log_prefix} to follow the main live log, run: \n#{ssh_root_temp_command_interactive} tail -f '\~/.ec1.ini.ering/logs/ec1.ini.root_phase2.ering'\n\n"
+        puts "#{@ec1_log_prefix} to follow the main live log, run: \n#{ssh_root_temp_command} tail -f '\~/.ec1.ini.ering/logs/ec1.ini.root_phase2.ering'\n\n"
         #%x"#{ering_ini_ssh_root_phases_command}"
         @remote_check_phase_system_done_ering_checked = true
       end
