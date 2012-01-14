@@ -257,7 +257,7 @@ def remote_execute()
   until @ering_ini_ssh_root_phases_command_executed
     if e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
       puts "#{@ec1_log_prefix} starting remote phase_system installation: \n#{ering_ini_ssh_root_phases_command}\n\n"
-      system ering_ini_ssh_root_phases_command
+      %x"#{ering_ini_ssh_root_phases_command}"
       @ering_ini_ssh_root_phases_command_executed = true
     else
       puts "#{@ec1_log_prefix}>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
@@ -277,7 +277,7 @@ def remote_execute()
       if remote_check_phase_system_done_ering.chomp == 'done'
         puts "\n\n#{@ec1_log_prefix} ering_ini_phase_system: DONE\n"
         puts "#{@ec1_log_prefix} starting root_phase: \n#{ering_ini_ssh_root_phases_command}\n\n"
-        system ering_ini_ssh_root_phases_command
+        %x"#{ering_ini_ssh_root_phases_command}"
         @remote_check_phase_system_done_ering_checked = true
       end
     else
