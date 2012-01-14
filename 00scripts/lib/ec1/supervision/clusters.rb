@@ -249,6 +249,10 @@ def remote_execute()
     sleep 20
     remote_checking_system_ready
   end
+  until defined? @remote_check_system_ready_checked
+    remote_checking_system_ready
+    sleep 20
+  end
   puts "FIN ?"
 end
 
