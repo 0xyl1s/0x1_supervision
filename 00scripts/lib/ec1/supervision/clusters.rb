@@ -236,6 +236,7 @@ def remote_execute()
   remote_check_phase_system_done_ering_command = "#{ssh_root_temp_command} 'cat /root/#{@ec1_ini_ering_dir}/logs/ec1.ini.system.done.ering 2>/dev/null'"
   until defined? @remote_check_phase_system_done_ering_checked
     break if defined? @remote_check_system_ready_checked
+    #puts "EC1DEBUG>>> "
     unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
       puts "#{@ec1_log_prefix} checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     else
@@ -262,7 +263,7 @@ def remote_checking_system_ready()
   ssh_mainuser_command = "ssh -p#{EC1_MACHINE_SSH_PORT} -o PasswordAuthentication=no -o ConnectTimeout=5 #{EC1_MAINUSER_NAME}@#{EC1_MACHINE_TEMP_IP}"
   remote_check_system_ready_command = "#{ssh_mainuser_command} 'cat /home/#{EC1_MAINUSER_NAME}/.ec1.ini_user/ec1.ini.system.ready.ering 2>/dev/null'"
   unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_SSH_PORT) then
-    puts "#{@ec1_log_prefix} checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
+    puts "#{@ec1_log_prefix} checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_SSH_PORT}: UNAVAILABLE"
   else
     puts "#{@ec1_log_prefix} checking remote_check_system_ready_command\n#{remote_check_system_ready_command}"
     remote_check_system_ready = %x"#{remote_check_system_ready_command}"
