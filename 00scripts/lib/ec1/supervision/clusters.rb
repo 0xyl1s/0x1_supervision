@@ -232,8 +232,8 @@ def remote_execute()
 
   # launching remote phase_root
   remote_check_phase_system_done_ering_command = "#{ssh_root_temp_command} 'cat /root/#{@ec1_ini_ering_dir}/logs/ec1.ini.system.done.ering 2>/dev/null'"
-  until @remote_check_phase_system_done_ering_checked == 'ec1'
-    break if @remote_check_system_ready_checked == 'ec1'
+  until defined? @remote_check_phase_system_done_ering_checked
+    break if defined? @remote_check_system_ready_checked
     unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
       puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     else
@@ -243,7 +243,7 @@ def remote_execute()
       if remote_check_phase_system_done_ering.chomp == 'done'
         puts "\n\n#{e__datetime_sec} >>> ering_ini_phase_system: DONE\n"
         puts "#{e__datetime_sec} >>> starting root_phase: please run\n\n#{ering_ini_ssh_root_phases_command}\n\n"
-        @remote_check_phase_system_done_ering_checked == 'ec1'
+        @remote_check_phase_system_done_ering_checked = true
       end
     end
     sleep 20
@@ -263,7 +263,7 @@ def remote_checking_system_ready()
       puts "#{e__datetime_sec} >>> checking remote_check_system_ready_command\n#{remote_check_system_ready_command}"
       remote_check_system_ready = %x"#{remote_check_system_ready_command}"
       if remote_check_system_ready == 'ready'
-        @remote_check_system_ready_checked == 'ec1'
+        @remote_check_system_ready_checked = true
       end
     end
   end
