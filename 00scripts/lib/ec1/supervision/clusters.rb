@@ -39,6 +39,7 @@ def initialize(os, cluster_type, ering_version)
   @ec1_ini_ering_basedir = "#{@ec1_supervision_new_cluster_basedir}/#{@ec1_ini_ering_dir}"
   @ec1_ini_ering_logsdir = "#{@ec1_supervision_new_cluster_basedir}/.ec1.ini.ering/logs"
   @ec1_ini_ering_data_filepath = "#{@ec1_ini_ering_basedir}/.ec1.ini.ering.data.rb"
+  @ec1_log_prefix = "<<<[ec1.ering_ini #{EC1_MACHINE_HOSTNAME}.#{EC1_ENTITY_DOMAIN} #{e__datetime_sec}]>>>"
 end
 
 def valid_os?(os)
@@ -202,17 +203,17 @@ end
 def certificates_create()
   root_00certificates_ini_ering_path = "#{@ec1_ini_ering_basedir}/dispatch/root/00certificates"
   mainuser_00certificates_ini_ering_path = "#{@ec1_ini_ering_basedir}/dispatch/mainuser/00certificates"
-  system "cd #{root_00certificates_ini_ering_path} ; echo 'ec1>>> ering_ini #{EC1_MACHINE_HOSTNAME}.#{EC1_ENTITY_DOMAIN} > #{e__datetime_sec} > generating root default ssh certificate #{EC1_ROOT_SSH_DEFCERT_PASSCODE}' ; e.certificate_create ./ #{EC1_MACHINE_HOSTNAME}_#{EC1_ROOT_NAME}_v1 #{EC1_ROOT_SSH_DEFCERT_PASSCODE} -c"
-  system "cd #{mainuser_00certificates_ini_ering_path} ; echo 'ec1>>> ering_ini #{EC1_MACHINE_HOSTNAME}.#{EC1_ENTITY_DOMAIN} > #{e__datetime_sec} > generating mainuser default ssh certificate #{EC1_MAINUSER_SSH_DEFCERT_PASSCODE}' ; e.certificate_create ./ #{EC1_MACHINE_HOSTNAME}_#{EC1_MAINUSER_NAME}_v1 #{EC1_MAINUSER_SSH_DEFCERT_PASSCODE} -c"
+  system "cd #{root_00certificates_ini_ering_path} ; echo '#{@ec1_log_prefix} generating root default ssh certificate #{EC1_ROOT_SSH_DEFCERT_PASSCODE}' ; e.certificate_create ./ #{EC1_MACHINE_HOSTNAME}_#{EC1_ROOT_NAME}_v1 #{EC1_ROOT_SSH_DEFCERT_PASSCODE} -c"
+  system "cd #{mainuser_00certificates_ini_ering_path} ; echo '#{@ec1_log_prefix} generating mainuser default ssh certificate #{EC1_MAINUSER_SSH_DEFCERT_PASSCODE}' ; e.certificate_create ./ #{EC1_MACHINE_HOSTNAME}_#{EC1_MAINUSER_NAME}_v1 #{EC1_MAINUSER_SSH_DEFCERT_PASSCODE} -c"
 end
 
 def remote_execute()
   until @rsync_command_executed
     rsync_command = "rsync -avh --no-o --no-g --stats --progress --rsh='ssh -p#{EC1_MACHINE_TEMP_SSH_PORT}' #{@ec1_ini_ering_basedir}/ root@#{EC1_MACHINE_TEMP_IP}:/root/#{@ec1_ini_ering_dir}/"
     unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
-      puts "ec1>>> ering_ini #{EC1_MACHINE_HOSTNAME}.#{EC1_ENTITY_DOMAIN} > #{e__datetime_sec} > checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
+      puts "#{@ec1_log_prefix} checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     else
-      puts "ec1>>> ering_ini #{EC1_MACHINE_HOSTNAME}.#{EC1_ENTITY_DOMAIN} > #{e__datetime_sec} > command: #{rsync_command}"
+      puts "#{@ec1_log_prefix} command: #{rsync_command}"
       @rsync_command_executed = true if system rsync_command
     end
   end
@@ -223,7 +224,7 @@ def remote_execute()
   ering_ini_ssh_root_phases_command = "#{ssh_root_temp_command_interactive} 'bash /root/#{@ec1_ini_ering_dir}/ering.#{@ering_current}'"
   until @ering_ini_ssh_root_phases_command_executed
     unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
-      puts "ec1>>> ering_ini #{EC1_MACHINE_HOSTNAME}.#{EC1_ENTITY_DOMAIN} > #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
+      puts "#{@ec1_log_prefix}>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     else
       puts "#{e__datetime_sec} >>> starting remote phase_system installation: please run\n\n#{ering_ini_ssh_root_phases_command}\n\n"
       @ering_ini_ssh_root_phases_command_executed = true
@@ -236,7 +237,7 @@ def remote_execute()
   until defined? @remote_check_phase_system_done_ering_checked
     break if defined? @remote_check_system_ready_checked
     unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
-      puts "ec1>>> ering_ini #{EC1_MACHINE_HOSTNAME}.#{EC1_ENTITY_DOMAIN} > #{e__datetime_sec} > checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
+      puts "#{@ec1_log_prefix} checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     else
       puts "#{e__datetime_sec} >>> checking remote_check_phase_system_done_ering_command\n#{remote_check_phase_system_done_ering_command}"
       remote_check_phase_system_done_ering = %x"#{remote_check_phase_system_done_ering_command}"
@@ -261,7 +262,7 @@ def remote_checking_system_ready()
   ssh_mainuser_command = "ssh -p#{EC1_MACHINE_SSH_PORT} -o PasswordAuthentication=no -o ConnectTimeout=5 #{EC1_MAINUSER_NAME}@#{EC1_MACHINE_TEMP_IP}"
   remote_check_system_ready_command = "#{ssh_mainuser_command} 'cat /home/#{EC1_MAINUSER_NAME}/.ec1.ini_user/ec1.ini.system.ready.ering 2>/dev/null'"
   unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_SSH_PORT) then
-    puts "ec1>>> ering_ini #{EC1_MACHINE_HOSTNAME}.#{EC1_ENTITY_DOMAIN} > #{e__datetime_sec} > checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
+    puts "#{@ec1_log_prefix} checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
   else
     puts "#{e__datetime_sec} >>> checking remote_check_system_ready_command\n#{remote_check_system_ready_command}"
     remote_check_system_ready = %x"#{remote_check_system_ready_command}"
