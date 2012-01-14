@@ -59,7 +59,7 @@ def initialize(os, cluster_type, ering_version)
   @ec1_user_homedir = e__user_homedir
   ec1sup_ssh_pub_key_file = "#{@ec1_user_homedir}/.ssh/id_rsa.pub"
   abort "EC1ERROR: can't access ec1sup_ssh_pub_key_file (#{ec1sup_ssh_pub_key_file})" unless e__is_a_file?(ec1sup_ssh_pub_key_file) or e__is_a_symlink?(ec1sup_ssh_pub_key_file)
-  @ec1sup_ssh_pub_key = e__file_read(ec1sup_ssh_pub_key_file)
+  @ec1sup_ssh_pub_key = e__file_read_chomp(ec1sup_ssh_pub_key_file)
   @ec1_supervision_new_cluster_basedir = "#{@ec1_user_homedir}/.ec1.sup/cluster.new"
   @ec1_ini_ering_dir = ".ec1.ini.ering"
   @ec1_ini_ering_basedir = "#{@ec1_supervision_new_cluster_basedir}/#{@ec1_ini_ering_dir}"
