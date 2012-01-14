@@ -237,6 +237,8 @@ def remote_execute()
   ec1_sup_ssh_pubkey_dummy = "@@_ec1_sup_ssh_pubkey_@@"
   ssh_command_initial_authorized_keys = e__content_replace(RAW_SSH_COMMAND_INITIAL_AUTHORIZED_KEYS, ec1_sup_ssh_pubkey_dummy, @ec1sup_ssh_pub_key)
   transfert_sup_ssh_pubkey_command = "echo \"#{ssh_command_initial_authorized_keys}\" | ssh -p#{EC1_MACHINE_TEMP_SSH_PORT} root@#{EC1_MACHINE_TEMP_IP} bash"
+  puts transfert_sup_ssh_pubkey_command
+  puts "#{@ec1_log_prefix} transfering Supervision user's ssh pubkey"
   system transfert_sup_ssh_pubkey_command
   abort
   until @rsync_command_executed
