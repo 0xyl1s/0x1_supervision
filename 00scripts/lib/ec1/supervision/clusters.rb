@@ -236,7 +236,7 @@ def remote_execute()
   remote_check_phase_system_done_ering_command = "#{ssh_root_temp_command} 'cat /root/#{@ec1_ini_ering_dir}/logs/ec1.ini.system.done.ering 2>/dev/null'"
   until defined? @remote_check_phase_system_done_ering_checked
     break if defined? @remote_check_system_ready_checked
-    puts "EC1DEBUG>>> defined? @remote_check_system_ready_checked => #{defined? @remote_check_system_ready_checked}"
+    puts "EC1DEBUG>>> defined? @remote_check_system_ready_checked => #{(defined? @remote_check_system_ready_checked).class}"
     if e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
       puts " #{@ec1_log_prefix}checking remote_check_phase_system_done_ering_command\n#{remote_check_phase_system_done_ering_command}"
       remote_check_phase_system_done_ering = %x"#{remote_check_phase_system_done_ering_command}"
@@ -249,7 +249,7 @@ def remote_execute()
       puts "#{@ec1_log_prefix} checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE3"
     end
     sleep 20
-    remote_checking_system_ready
+    remote_checking_system_ready(false)
   end
   until defined? @remote_check_system_ready_checked
     remote_checking_system_ready
@@ -258,18 +258,18 @@ def remote_execute()
   puts "FIN ?"
 end
 
-def remote_checking_system_ready()
+def remote_checking_system_ready(verbose=true)
   # checking system_ready
   ssh_mainuser_command = "ssh -p#{EC1_MACHINE_SSH_PORT} -o PasswordAuthentication=no -o ConnectTimeout=5 #{EC1_MAINUSER_NAME}@#{EC1_MACHINE_TEMP_IP}"
   remote_check_system_ready_command = "#{ssh_mainuser_command} 'cat /home/#{EC1_MAINUSER_NAME}/.ec1.ini_user/ec1.ini.system.ready.ering 2>/dev/null'"
+  puts "#{@ec1_log_prefix} checking remote_check_system_ready_command\n#{remote_check_system_ready_command}" if verbose
   if e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_SSH_PORT) then
-    puts "#{@ec1_log_prefix} checking remote_check_system_ready_command\n#{remote_check_system_ready_command}"
     remote_check_system_ready = %x"#{remote_check_system_ready_command}"
     if remote_check_system_ready == 'ready'
       @remote_check_system_ready_checked = true
     end
   else
-    puts "#{@ec1_log_prefix} checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_SSH_PORT}: UNAVAILABLE4"
+    puts "#{@ec1_log_prefix} checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_SSH_PORT}: UNAVAILABLE4" if verbose
   end
 end
 
