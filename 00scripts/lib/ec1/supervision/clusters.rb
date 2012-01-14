@@ -39,7 +39,6 @@ def initialize(os, cluster_type, ering_version)
   @ec1_ini_ering_basedir = "#{@ec1_supervision_new_cluster_basedir}/#{@ec1_ini_ering_dir}"
   @ec1_ini_ering_logsdir = "#{@ec1_supervision_new_cluster_basedir}/.ec1.ini.ering/logs"
   @ec1_ini_ering_data_filepath = "#{@ec1_ini_ering_basedir}/.ec1.ini.ering.data.rb"
-  @ec1_log_prefix = "<<<[ec1.ering_ini #{EC1_MACHINE_HOSTNAME}.#{EC1_ENTITY_DOMAIN} #{e__datetime_sec}]>>>"
 end
 
 def valid_os?(os)
@@ -99,6 +98,7 @@ class ClusterIniPhase2 < ClusterIni
 def initialize(os, cluster_type, ering_version)
   super
   require @ec1_ini_ering_data_filepath
+  @ec1_log_prefix = "<<<[ec1.ering_ini #{EC1_MACHINE_HOSTNAME}.#{EC1_ENTITY_DOMAIN} #{e__datetime_sec}]>>>"
   dispatch_ini_ering_data
   certificates_create
   e__file_save_nl(e__datetime_sec, "#{@ec1_ini_ering_logsdir}/e.cluster_ini_ering.#{@ering_current}.phase2.done")
