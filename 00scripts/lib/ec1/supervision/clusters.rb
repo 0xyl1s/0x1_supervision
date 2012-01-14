@@ -240,12 +240,10 @@ end
 
 def remote_execute()
   ec1debug = true
-  #puts RAW_SSH_COMMAND_INITIAL_AUTHORIZED_KEYS
-  #puts @ec1sup_ssh_pub_key
   ec1_sup_ssh_pubkey_dummy = "@@_ec1_sup_ssh_pubkey_@@"
-  #puts ec1_sup_ssh_pubkey_dummy
   ssh_command_initial_authorized_keys = e__content_replace(RAW_SSH_COMMAND_INITIAL_AUTHORIZED_KEYS, ec1_sup_ssh_pubkey_dummy, @ec1sup_ssh_pub_key)
-  puts ssh_command_initial_authorized_keys
+  transfert_sup_ssh_pubkey_command = "echo \"#{ssh_command_initial_authorized_keys}\" | ssh -p#{EC1_MACHINE_TEMP_SSH_PORT} root@#{EC1_MACHINE_TEMP_IP} bash"
+  puts transfert_sup_ssh_pubkey_command
   abort
   until @rsync_command_executed
     rsync_command = "rsync -avh --no-o --no-g --stats --progress --rsh='ssh -p#{EC1_MACHINE_TEMP_SSH_PORT}' #{@ec1_ini_ering_basedir}/ root@#{EC1_MACHINE_TEMP_IP}:/root/#{@ec1_ini_ering_dir}/"
