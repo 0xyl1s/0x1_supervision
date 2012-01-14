@@ -257,7 +257,7 @@ def remote_execute()
   until @ering_ini_ssh_root_phases_command_executed
     if e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
       puts "#{@ec1_log_prefix} starting remote phase_system installation: \n#{ering_ini_ssh_root_phases_command}\n\n"
-      puts "#{@ec1_log_prefix} to follow the main live log, run: \n#{ssh_root_temp_command_interactive} tail -f '\~/.ec1.ini.ering/logs/ec1.ini.system.ering\n\n"
+      puts "#{@ec1_log_prefix} to follow the main live log, run: \n#{ssh_root_temp_command_interactive} tail -f '\~/.ec1.ini.ering/logs/ec1.ini.system.ering'\n\n"
       #%x"#{ering_ini_ssh_root_phases_command}"
       @ering_ini_ssh_root_phases_command_executed = true
     else
@@ -278,7 +278,7 @@ def remote_execute()
       if remote_check_phase_system_done_ering.chomp == 'done'
         puts "\n\n#{@ec1_log_prefix} ering_ini_phase_system: DONE\n"
         puts "#{@ec1_log_prefix} starting root_phase: \n#{ering_ini_ssh_root_phases_command}\n\n"
-        puts "#{@ec1_log_prefix} to follow the main live log, run: \n#{ssh_root_temp_command_interactive} tail -f '\~/.ec1.ini.ering/logs/ec1.ini.root_phase2.ering\n\n"
+        puts "#{@ec1_log_prefix} to follow the main live log, run: \n#{ssh_root_temp_command_interactive} tail -f '\~/.ec1.ini.ering/logs/ec1.ini.root_phase2.ering'\n\n"
         #%x"#{ering_ini_ssh_root_phases_command}"
         @remote_check_phase_system_done_ering_checked = true
       end
