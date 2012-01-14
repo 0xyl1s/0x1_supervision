@@ -215,7 +215,6 @@ def remote_execute()
       puts "ec1>>> command: #{rsync_command}"
       @rsync_command_executed = true if system rsync_command
     end
-    sleep 10
   end
 
   # launching remote phase_system
