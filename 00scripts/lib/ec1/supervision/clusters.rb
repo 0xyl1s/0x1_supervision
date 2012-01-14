@@ -261,10 +261,9 @@ def remote_execute()
     if e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
       puts "#{@ec1_log_prefix} starting remote phase_system installation: \n#{ering_ini_ssh_root_phases_command}\n\n"
       puts "#{@ec1_log_prefix} to follow the main live log, run: \n#{ssh_root_temp_command} tail -f '\~/.ec1.ini.ering/logs/ec1.ini.system.ering'\n\n"
-      test_command = "#{ssh_root_temp_command} ls -al /root \\; sleep 5"
-      system "urxvt -e #{test_command}"
-      abort
-      %x"urxvt -e '#{ering_ini_ssh_root_phases_command}'"
+      #test_command = "#{ssh_root_temp_command} ls -al /root \\; sleep 5"
+      #system "urxvt -e #{test_command}"
+      abort "ERROR running command:\n#{ering_ini_ssh_root_phases_command}" unless system "urxvt -e '#{ering_ini_ssh_root_phases_command}'"
       @ering_ini_ssh_root_phases_command_executed = true
     else
       puts "#{@ec1_log_prefix}>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
