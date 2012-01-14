@@ -225,7 +225,6 @@ def remote_execute()
       puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     else
       puts "#{e__datetime_sec} >>> starting remote phase_system installation: please run\n\n#{ering_ini_ssh_root_phases_command}\n\n"
-      #system ering_ini_ssh_root_phases_command
       @ering_ini_ssh_root_phases_command_executed = true
     end
     sleep 10
@@ -233,8 +232,8 @@ def remote_execute()
 
   # launching remote phase_root
   remote_check_phase_system_done_ering_command = "#{ssh_root_temp_command} 'cat /root/#{@ec1_ini_ering_dir}/logs/ec1.ini.system.done.ering 2>/dev/null'"
-  until @remote_check_phase_system_done_ering_checked
-    break if @remote_check_system_ready_checked
+  until @remote_check_phase_system_done_ering_checked == 'ec1'
+    break if @remote_check_system_ready_checked == 'ec1'
     unless e__service_online?(EC1_MACHINE_TEMP_IP, EC1_MACHINE_TEMP_SSH_PORT)
       puts "ec1>>> #{e__datetime_sec} >>> checking ip/port #{EC1_MACHINE_TEMP_IP}/#{EC1_MACHINE_TEMP_SSH_PORT}: UNAVAILABLE"
     else
@@ -242,16 +241,15 @@ def remote_execute()
       remote_check_phase_system_done_ering = %x"#{remote_check_phase_system_done_ering_command}"
       puts "EC1DEBUG: #{remote_check_phase_system_done_ering.class} (size = #{remote_check_phase_system_done_ering.size}/ chomped: #{remote_check_phase_system_done_ering.chomp.size}) : #{remote_check_phase_system_done_ering}"
       if remote_check_phase_system_done_ering.chomp == 'done'
-        puts "#{e__datetime_sec} >>> ering_ini_phase_system: DONE"
-        puts "#{e__datetime_sec} >>> starting root_phase\n#{ering_ini_ssh_root_phases_command}"
+        puts "\n\n#{e__datetime_sec} >>> ering_ini_phase_system: DONE\n"
         puts "#{e__datetime_sec} >>> starting root_phase: please run\n\n#{ering_ini_ssh_root_phases_command}\n\n"
-        #system ering_ini_ssh_root_phases_command
-        @remote_check_phase_system_done_ering_checked = true
+        @remote_check_phase_system_done_ering_checked == 'ec1'
       end
     end
     sleep 20
-    #remote_checking_system_ready
+    remote_checking_system_ready
   end
+  puts "FIN ?"
 end
 
 def remote_checking_system_ready()
@@ -265,7 +263,7 @@ def remote_checking_system_ready()
       puts "#{e__datetime_sec} >>> checking remote_check_system_ready_command\n#{remote_check_system_ready_command}"
       remote_check_system_ready = %x"#{remote_check_system_ready_command}"
       if remote_check_system_ready == 'ready'
-        @remote_check_system_ready_checked = true
+        @remote_check_system_ready_checked == 'ec1'
       end
     end
   end
