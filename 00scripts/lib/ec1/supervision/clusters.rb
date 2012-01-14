@@ -25,28 +25,6 @@ include Ec1::Lib::Toolkit::Standard
 require 'ec1/lib/toolkit/online.rb'
 include Ec1::Lib::Toolkit::Online
 
-SSH_COMMAND_INITIAL_AUTHORIZED_KEYS = <<EC1HEREDOC
-#!/usr/bin/env bash
-sup_ssh_pubkey="#{@ec1sup_ssh_pub_key}"
-
-user_home_dir=$(cd ~ ; pwd)
-user_ssh_dir="${user_home_dir}/.ssh"
-echo "${user_ssh_dir}"
-if [[ -d "${user_ssh_dir}" ]]
-then
-    echo "${user_ssh_dir}"
-    mv "${user_ssh_dir}" "${user_ssh_dir}.ini"
-    echo "moving initial ssh dir"
-fi
-mkdir ${user_ssh_dir}
-chmod 700 ${user_ssh_dir}
-user_authorized_keys_file="${user_ssh_dir}/authorized_keys"
-echo ${sup_ssh_pubkey} > ${user_authorized_keys_file}
-chmod 600 ${user_authorized_keys_file}
-ls -al ${user_ssh_dir}
-# vim: ft=sh
-EC1HEREDOC
-
 def initialize(os, cluster_type, ering_version)
   @os = os
   abort "ERROR: invalid cluster_type (#{cluster_type}" unless valid_os?(os)
@@ -233,6 +211,29 @@ end
 
 def remote_execute()
   ec1debug = true
+
+SSH_COMMAND_INITIAL_AUTHORIZED_KEYS = <<EC1HEREDOC
+#!/usr/bin/env bash
+sup_ssh_pubkey="#{@ec1sup_ssh_pub_key}"
+
+user_home_dir=$(cd ~ ; pwd)
+user_ssh_dir="${user_home_dir}/.ssh"
+echo "${user_ssh_dir}"
+if [[ -d "${user_ssh_dir}" ]]
+then
+    echo "${user_ssh_dir}"
+    mv "${user_ssh_dir}" "${user_ssh_dir}.ini"
+    echo "moving initial ssh dir"
+fi
+mkdir ${user_ssh_dir}
+chmod 700 ${user_ssh_dir}
+user_authorized_keys_file="${user_ssh_dir}/authorized_keys"
+echo ${sup_ssh_pubkey} > ${user_authorized_keys_file}
+chmod 600 ${user_authorized_keys_file}
+ls -al ${user_ssh_dir}
+# vim: ft=sh
+EC1HEREDOC
+
   puts SSH_COMMAND_INITIAL_AUTHORIZED_KEYS
   abort
   until @rsync_command_executed
