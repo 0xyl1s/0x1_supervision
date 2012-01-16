@@ -106,7 +106,8 @@ private
 
 def download_raw_install_ini_dir()
   # dowloading raw ini dir archive
-  ini_dir_archive_uri = "https://raw.github.com/epiculture/ec1_supervision_templates/master/#{@os}/erings/#{@cluster_type}/ini_ering_templates/variation_01/.ec1.ini.ering.tar"
+  ini_dir_archive_uri = e__read_uri_content("https://raw.github.com/epiculture/ec1_supervision_templates/master/#{@os}/erings/#{@cluster_type}/ini_ering_templates/variation_01/.ec1.ini.ering.tar.uri")
+  puts "EC1DEBUG: ini_dir_archive_uri = #{ini_dir_archive_uri}"
   e__http_download_and_save(ini_dir_archive_uri, @ec1_supervision_new_cluster_basedir)
   # extracting ini dir tar archive
   %x"cd #{@ec1_supervision_new_cluster_basedir} ; tar xvf ./.ec1.ini.ering.tar"
