@@ -133,7 +133,6 @@ def initialize(os, cluster_type, ering_version)
   dispatch_ini_ering_data
   abort "ERROR: provided os info (#{EC1_MACHINE_OS}) is not compatible with this install script (developped for #{@os})" unless @os == EC1_MACHINE_OS
   puts "EC1DEBUG: provided os info (#{EC1_MACHINE_OS}) is compatible with this install script (developped for #{@os})"
-  abort
   certificates_create
   e__file_save_nl(e__datetime_sec, "#{@ec1_ini_ering_logsdir}/e.cluster_ini_ering.#{@ering_current}.phase2.done")
   remote_execute
