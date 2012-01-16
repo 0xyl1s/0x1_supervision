@@ -130,6 +130,9 @@ def initialize(os, cluster_type, ering_version)
   # TODO: ec1_log_prefix time is fixed...
   @ec1_log_prefix = "<<<[ec1.ering_ini #{EC1_MACHINE_HOSTNAME}.#{EC1_ENTITY_DOMAIN} #{e__datetime_sec}]>>>"
   dispatch_ini_ering_data
+  abort "ERROR: provided os info (#{EC1_MACHINE_OS}) is not compatible with this install script (developped for #{@os})" unless @os == EC1_MACHINE_OS
+  puts "EC1DEBUG: provided os info (#{EC1_MACHINE_OS}) is compatible with this install script (developped for #{@os})"
+  abort
   certificates_create
   e__file_save_nl(e__datetime_sec, "#{@ec1_ini_ering_logsdir}/e.cluster_ini_ering.#{@ering_current}.phase2.done")
   remote_execute
@@ -137,31 +140,25 @@ end
 
 def dispatch_ini_ering_data()
   imported_ini_ering_data = {}
-  imported_ini_ering_data[:ec1_machine_ssh_port] = {
-    :import_value => EC1_MACHINE_SSH_PORT,
-    :dummy_text_replace => '@@_ec1_machine_ssh_port_@@',
-    :file_relative_path => 'dispatch/system/00data/machine.ssh_port'
-  }
-  imported_ini_ering_data[:ec1_entity_domain] = {
-    :import_value => EC1_ENTITY_DOMAIN,
-    :dummy_text_replace => '@@_ec1_entity_domain_@@',
-    :file_relative_path => 'dispatch/system/00data/entity.domain'
-  }
-
-  imported_ini_ering_data[:ec1_machine_ssh_port] = {
-    :import_value => EC1_MACHINE_SSH_PORT,
-    :dummy_text_replace => '@@_ec1_machine_ssh_port_@@',
-    :file_relative_path => 'dispatch/system/00data/machine.ssh_port'
-  }
-  imported_ini_ering_data[:ec1_entity_domain] = {
-    :import_value => EC1_ENTITY_DOMAIN,
-    :dummy_text_replace => '@@_ec1_entity_domain_@@',
-    :file_relative_path => 'dispatch/system/00data/entity.domain'
+  imported_ini_ering_data[:ec1_machine_os] = {
+    :import_value => EC1_MACHINE_OS,
+    :dummy_text_replace => '@@_ec1_machine_os_@@',
+    :file_relative_path => 'dispatch/system/00data/machine.os'
   }
   imported_ini_ering_data[:ec1_machine_hostname] = {
     :import_value => EC1_MACHINE_HOSTNAME,
     :dummy_text_replace => '@@_ec1_machine_hostname_@@',
     :file_relative_path => 'dispatch/system/00data/machine.hostname'
+  }
+  imported_ini_ering_data[:ec1_machine_ssh_port] = {
+    :import_value => EC1_MACHINE_SSH_PORT,
+    :dummy_text_replace => '@@_ec1_machine_ssh_port_@@',
+    :file_relative_path => 'dispatch/system/00data/machine.ssh_port'
+  }
+  imported_ini_ering_data[:ec1_entity_domain] = {
+    :import_value => EC1_ENTITY_DOMAIN,
+    :dummy_text_replace => '@@_ec1_entity_domain_@@',
+    :file_relative_path => 'dispatch/system/00data/entity.domain'
   }
   imported_ini_ering_data[:ec1_root_name] = {
     :import_value => EC1_ROOT_NAME,
