@@ -20,7 +20,7 @@ def create(path, name, passphrase_code, default_cert_file_option, passphrase=nil
     # TODO: use ruby symlink creation command instead of system util
     system("(cd #{path} ; ln -s #{name} id_rsa ; ln -s #{name}.pub id_rsa.pub)")
   when '-b'
-    echo "INFO: bypassing openssh_defcert_file creation"
+    puts "INFO: bypassing openssh_defcert_file creation"
   else
     abort "ERROR: default_cert_file_option must be either -c (create) or -b (bypass) (currently set as: #{default_cert_file_option})"
   end
