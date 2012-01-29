@@ -1,11 +1,11 @@
 # encoding: utf-8
 # tested with ruby 1.9.3
 
-module Ec1 module Supervision module Security
+module X module Supervision module Security
 
 class Certificates
-require 'ec1/lib/toolkit/standard.rb'
-include Ec1::Lib::Toolkit::Standard
+require '0x1/lib/toolkit/standard.rb'
+include X::Lib::Toolkit::Standard
 
 def create(path, name, passphrase_code, default_cert_file_option, passphrase=nil)
   abort "path unavailable: #{path}" unless e__is_a_dir?(path)

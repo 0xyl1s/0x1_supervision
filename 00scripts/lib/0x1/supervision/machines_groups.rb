@@ -1,16 +1,16 @@
 # encoding: utf-8
 # tested with ruby 1.9.2
 
-module Ec1 module Admins module Utils module Machines
+module X module Admins module Utils module Machines
 
 class Groups
-require 'ec1/lib/toolkit/standard.rb'
-include Ec1::Lib::Toolkit::Standard
+require '0x1/lib/toolkit/standard.rb'
+include X::Lib::Toolkit::Standard
   def initialize()
     @machine_group_file = '/etc/group'
-    @machine_groups_raw = ec1__file_readlines(@machine_group_file)
-    @machine_group_ec1_file = '/root/.ec1/00data/groups'
-    @machine_groups_ec1_raw = ec1__file_readlines(@machine_group_ec1_file)
+    @machine_groups_raw = x__file_readlines(@machine_group_file)
+    @machine_group_0x1_file = '/root/.0x1/00data/groups'
+    @machine_groups_0x1_raw = x__file_readlines(@machine_group_0x1_file)
   end
 
   def info_machine_group(machine_group_name_raw, info_level_raw=:summary)
@@ -65,7 +65,7 @@ include Ec1::Lib::Toolkit::Standard
   def machine_group_add(new_machine_group, new_machine_id)
   end
 
-  def machine_group_add_from_ec1_file
+  def machine_group_add_from_0x1_file
   end
 end
 
