@@ -106,6 +106,7 @@ private
 
 def download_raw_install_ini_dir()
   # dowloading raw ini dir archive
+  puts "XDEBUG: https://raw.github.com/0xyl1s/0x1_supervision_templates/master/#{@os}/0rings/#{@cluster_type}/ini_0ring_templates/variation_01/.0x1.ini.0ring.tar.uri"
   ini_dir_archive_uri = e__read_uri_content("https://raw.github.com/0xyl1s/0x1_supervision_templates/master/#{@os}/0rings/#{@cluster_type}/ini_0ring_templates/variation_01/.0x1.ini.0ring.tar.uri")
   puts "XDEBUG: ini_dir_archive_uri = #{ini_dir_archive_uri}"
   e__http_download_and_save(ini_dir_archive_uri, @x_supervision_new_cluster_basedir)
