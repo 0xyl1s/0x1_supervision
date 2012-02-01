@@ -93,9 +93,9 @@ def initialize(os, cluster_type, x_0ring_version)
   abort "ERROR: when starting new cluster installation, x_supervision_new_cluster_basedir should be empty (#{@x_supervision_new_cluster_basedir})" unless e__dir_is_empty?(@x_supervision_new_cluster_basedir)
   abort "ERROR: invalid os type (#{os}" unless valid_os?(os)
   download_raw_install_ini_dir
-  puts "\n\n0x1.cluster_ini_phase1 completed. When datafile is filled #{@x_ini_0ring_data_filepath}, please run again\n\ne.cluster_ini_0ring.#{@x_0ring_current}\n\n"
+  puts "\n\n0x1.cluster_ini_phase1 completed. When datafile is filled #{@x_ini_0ring_data_filepath}, please run again\n\nx.cluster_ini_0ring.#{@x_0ring_current}\n\n"
   %x"e #{@x_ini_0ring_data_filepath}"
-  x_ini_0ring_phase1_done_file = "#{@x_ini_0ring_logsdir}/e.cluster_ini_0ring.#{@x_0ring_current}.phase1.done"
+  x_ini_0ring_phase1_done_file = "#{@x_ini_0ring_logsdir}/x.cluster_ini_0ring.#{@x_0ring_current}.phase1.done"
   e__file_save_nl(e__datetime_sec, x_ini_0ring_phase1_done_file)
   abort "ERROR: can't process ini phase1 done log file" unless e__is_a_file?(x_ini_0ring_phase1_done_file)
   ClusterIniPhase2.new(@os, @cluster_type, @x_0ring_version)
@@ -135,7 +135,7 @@ def initialize(os, cluster_type, x_0ring_version)
   abort "ERROR: provided os info (#{X_MACHINE_OS}) is not compatible with this install script (developped for #{@os})" unless @os == X_MACHINE_OS
   puts "XDEBUG: provided os info (#{X_MACHINE_OS}) is compatible with this install script (developped for #{@os})"
   certificates_create
-  e__file_save_nl(e__datetime_sec, "#{@x_ini_0ring_logsdir}/e.cluster_ini_0ring.#{@x_0ring_current}.phase2.done")
+  e__file_save_nl(e__datetime_sec, "#{@x_ini_0ring_logsdir}/x.cluster_ini_0ring.#{@x_0ring_current}.phase2.done")
   remote_execute
 end
 
@@ -231,8 +231,8 @@ end
 def certificates_create()
   root_00certificates_ini_0ring_path = "#{@x_ini_0ring_basedir}/dispatch/root/00certificates"
   mainuser_00certificates_ini_0ring_path = "#{@x_ini_0ring_basedir}/dispatch/mainuser/00certificates"
-  system "cd #{root_00certificates_ini_0ring_path} ; echo '#{@x_log_prefix} generating root default ssh certificate #{X_ROOT_SSH_DEFCERT_PASSCODE}' ; e.certificate_create ./ #{X_MACHINE_HOSTNAME}_#{X_ROOT_NAME}_v1 #{X_ROOT_SSH_DEFCERT_PASSCODE} -c"
-  system "cd #{mainuser_00certificates_ini_0ring_path} ; echo '#{@x_log_prefix} generating mainuser default ssh certificate #{X_MAINUSER_SSH_DEFCERT_PASSCODE}' ; e.certificate_create ./ #{X_MACHINE_HOSTNAME}_#{X_MAINUSER_NAME}_v1 #{X_MAINUSER_SSH_DEFCERT_PASSCODE} -c"
+  system "cd #{root_00certificates_ini_0ring_path} ; echo '#{@x_log_prefix} generating root default ssh certificate #{X_ROOT_SSH_DEFCERT_PASSCODE}' ; x.certificate_create ./ #{X_MACHINE_HOSTNAME}_#{X_ROOT_NAME}_v1 #{X_ROOT_SSH_DEFCERT_PASSCODE} -c"
+  system "cd #{mainuser_00certificates_ini_0ring_path} ; echo '#{@x_log_prefix} generating mainuser default ssh certificate #{X_MAINUSER_SSH_DEFCERT_PASSCODE}' ; x.certificate_create ./ #{X_MACHINE_HOSTNAME}_#{X_MAINUSER_NAME}_v1 #{X_MAINUSER_SSH_DEFCERT_PASSCODE} -c"
 end
 
 def remote_execute()
