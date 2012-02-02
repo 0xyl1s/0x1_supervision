@@ -2,10 +2,12 @@
 # tested with ruby 1.9.3
 
 module X module Supervision module Security
+require_relative '../0x1_lib.helper.rb'
 
 class Certificates
-require '0x1/lib/toolkit/standard.rb'
-include X::Lib::Toolkit::Standard
+def initialize(i_length_raw=nil, b_lowercase=false)
+  x__load_modules([:standard])
+end
 
 def create(path, name, passphrase_code, default_cert_file_option, passphrase=nil)
   abort "path unavailable: #{path}" unless x__is_a_dir?(path)

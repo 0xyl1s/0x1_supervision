@@ -3,7 +3,7 @@
 # tested with ruby 1.9.2
 
 module X module Admins module Utils module Machines
-require '0x1/admins/utils/machines_groups.rb'
+require_relative '../lib/0x1/supervision/machines_groups.rb'
 
 
 USAGE = <<-heredoc

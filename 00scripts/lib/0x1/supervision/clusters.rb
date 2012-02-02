@@ -2,6 +2,7 @@
 # tested with ruby 1.9.3
 
 module X module Supervision module Clusters
+require_relative '../0x1_lib.helper.rb'
 
 OSES = [
   'ub10.04_x86_64',
@@ -47,12 +48,8 @@ XHEREDOC
 
 # TODO: merge phases 1 and 2 classes into main ClusterIni class
 class ClusterIni
-require '0x1/lib/toolkit/standard.rb'
-include X::Lib::Toolkit::Standard
-require '0x1/lib/toolkit/online.rb'
-include X::Lib::Toolkit::Online
-
 def initialize(os, cluster_type, x_0ring_version)
+  x__load_modules([:standard, :onlline])
   @os = os
   abort "ERROR: invalid cluster_type (#{cluster_type}" unless valid_os?(os)
   @cluster_type = cluster_type if valid_cluster_type?(cluster_type)
