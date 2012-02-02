@@ -8,11 +8,11 @@ require '0x1/lib/toolkit/standard.rb'
 include X::Lib::Toolkit::Standard
 
 def create(path, name, passphrase_code, default_cert_file_option, passphrase=nil)
-  abort "path unavailable: #{path}" unless e__is_a_dir?(path)
+  abort "path unavailable: #{path}" unless x__is_a_dir?(path)
   certificate_path = File.join(path, name)
-  abort "certificate file exists already: #{certificate_path}" if e__is_a_file?(certificate_path)
+  abort "certificate file exists already: #{certificate_path}" if x__is_a_file?(certificate_path)
   certificate_passphrase_code_path = "#{certificate_path}.passcode"
-  abort "certificate_pass file exists already: #{certificate_passphrase_code_path}" if e__is_a_file?(certificate_passphrase_code_path)
+  abort "certificate_pass file exists already: #{certificate_passphrase_code_path}" if x__is_a_file?(certificate_passphrase_code_path)
   abort "ERROR: the mandatory format for passphrase_code is [nnnn] (4 numbers enclosed in brackets) : #{passphrase_code}" unless "#{passphrase_code}" =~ /^\[[0-9]{4}\]$/
   case default_cert_file_option
   when '-c'
@@ -27,12 +27,12 @@ def create(path, name, passphrase_code, default_cert_file_option, passphrase=nil
   command = "ssh-keygen -f #{certificate_path} -C #{name}"
   command << " -P #{passphrase}" unless passphrase.nil?
   system("#{command}")
-  abort "Error creating certificate file #{certificate_path}" unless e__is_a_file?(certificate_path)
-  e__file_save_nl(passphrase_code, certificate_passphrase_code_path)
-  abort "Error creating certificate_passcode file: #{certificate_passphrase_code_path}" unless e__is_a_file?(certificate_passphrase_code_path)
+  abort "Error creating certificate file #{certificate_path}" unless x__is_a_file?(certificate_path)
+  x__file_save_nl(passphrase_code, certificate_passphrase_code_path)
+  abort "Error creating certificate_passcode file: #{certificate_passphrase_code_path}" unless x__is_a_file?(certificate_passphrase_code_path)
   if openssh_defcert_file
-    e__file_save_nl(name, openssh_defcert_file)
-    abort "Error creating openssh_defcert_file file: #{openssh_defcert_file}" unless e__is_a_file?(openssh_defcert_file)
+    x__file_save_nl(name, openssh_defcert_file)
+    abort "Error creating openssh_defcert_file file: #{openssh_defcert_file}" unless x__is_a_file?(openssh_defcert_file)
   end
 end
 

@@ -59,10 +59,10 @@ def initialize(os, cluster_type, x_0ring_version)
   @cluster_type_shortname = cluster_type_shortname(@cluster_type)
   @x_0ring_version = x_0ring_version
   @x_0ring_current = "#{@cluster_type_shortname}#{@x_0ring_version}"
-  @x_user_homedir = e__user_homedir
+  @x_user_homedir = x__user_homedir
   xsup_ssh_pub_key_file = "#{@x_user_homedir}/.ssh/id_rsa.pub"
-  abort "XERROR: can't access xsup_ssh_pub_key_file (#{xsup_ssh_pub_key_file})" unless e__is_a_file?(xsup_ssh_pub_key_file) or e__is_a_symlink?(xsup_ssh_pub_key_file)
-  @xsup_ssh_pub_key = e__file_read_chomp(xsup_ssh_pub_key_file)
+  abort "XERROR: can't access xsup_ssh_pub_key_file (#{xsup_ssh_pub_key_file})" unless x__is_a_file?(xsup_ssh_pub_key_file) or x__is_a_symlink?(xsup_ssh_pub_key_file)
+  @xsup_ssh_pub_key = x__file_read_chomp(xsup_ssh_pub_key_file)
   @x_supervision_new_cluster_basedir = "#{@x_user_homedir}/.0x1.sup/cluster.new"
   @x_ini_0ring_dir = ".0x1.ini.0ring"
   @x_ini_0ring_basedir = "#{@x_supervision_new_cluster_basedir}/#{@x_ini_0ring_dir}"
@@ -71,11 +71,11 @@ def initialize(os, cluster_type, x_0ring_version)
 end
 
 def valid_os?(os)
-  e__array_value_exist?(OSES, os)
+  x__array_value_exist?(OSES, os)
 end
 
 def valid_cluster_type?(cluster_type)
-  e__array_value_exist?(CLUSTER_TYPES, cluster_type)
+  x__array_value_exist?(CLUSTER_TYPES, cluster_type)
 end
 
 def cluster_type_shortname(cluster_type)
@@ -88,16 +88,16 @@ class ClusterIniPhase1 < ClusterIni
 
 def initialize(os, cluster_type, x_0ring_version)
   super
-  e__mkdir_p(@x_supervision_new_cluster_basedir) unless e__is_a_dir?(@x_supervision_new_cluster_basedir)
-  abort "ERROR: can't access neither create supervision basedir (#{@x_supervision_new_cluster_basedir})" unless e__is_a_dir?(@x_supervision_new_cluster_basedir)
-  abort "ERROR: when starting new cluster installation, x_supervision_new_cluster_basedir should be empty (#{@x_supervision_new_cluster_basedir})" unless e__dir_is_empty?(@x_supervision_new_cluster_basedir)
+  x__mkdir_p(@x_supervision_new_cluster_basedir) unless x__is_a_dir?(@x_supervision_new_cluster_basedir)
+  abort "ERROR: can't access neither create supervision basedir (#{@x_supervision_new_cluster_basedir})" unless x__is_a_dir?(@x_supervision_new_cluster_basedir)
+  abort "ERROR: when starting new cluster installation, x_supervision_new_cluster_basedir should be empty (#{@x_supervision_new_cluster_basedir})" unless x__dir_is_empty?(@x_supervision_new_cluster_basedir)
   abort "ERROR: invalid os type (#{os}" unless valid_os?(os)
   download_raw_install_ini_dir
   puts "\n\n0x1.cluster_ini_phase1 completed. When datafile is filled #{@x_ini_0ring_data_filepath}, please run again\n\nx.cluster_ini_0ring.#{@x_0ring_current}\n\n"
   %x"e #{@x_ini_0ring_data_filepath}"
   x_ini_0ring_phase1_done_file = "#{@x_ini_0ring_logsdir}/x.cluster_ini_0ring.#{@x_0ring_current}.phase1.done"
-  e__file_save_nl(e__datetime_sec, x_ini_0ring_phase1_done_file)
-  abort "ERROR: can't process ini phase1 done log file" unless e__is_a_file?(x_ini_0ring_phase1_done_file)
+  x__file_save_nl(x__datetime_sec, x_ini_0ring_phase1_done_file)
+  abort "ERROR: can't process ini phase1 done log file" unless x__is_a_file?(x_ini_0ring_phase1_done_file)
   ClusterIniPhase2.new(@os, @cluster_type, @x_0ring_version)
 end
 
@@ -107,18 +107,18 @@ private
 def download_raw_install_ini_dir()
   # dowloading raw ini dir archive
   puts "XDEBUG: https://raw.github.com/0xyl1s/0x1_supervision_templates/master/#{@os}/0rings/#{@cluster_type}/ini_0ring_templates/variation_01/.0x1.ini.0ring.tar.uri"
-  ini_dir_archive_uri = e__read_uri_content("https://raw.github.com/0xyl1s/0x1_supervision_templates/master/#{@os}/0rings/#{@cluster_type}/ini_0ring_templates/variation_01/.0x1.ini.0ring.tar.uri")
+  ini_dir_archive_uri = x__read_uri_content("https://raw.github.com/0xyl1s/0x1_supervision_templates/master/#{@os}/0rings/#{@cluster_type}/ini_0ring_templates/variation_01/.0x1.ini.0ring.tar.uri")
   puts "XDEBUG: ini_dir_archive_uri = #{ini_dir_archive_uri}"
-  e__http_download_and_save(ini_dir_archive_uri, @x_supervision_new_cluster_basedir)
+  x__http_download_and_save(ini_dir_archive_uri, @x_supervision_new_cluster_basedir)
   # extracting ini dir tar archive
   %x"cd #{@x_supervision_new_cluster_basedir} ; tar xvf ./.0x1.ini.0ring.tar"
-  abort "ERROR: can't access @x_ini_0ring_basedir (#{@x_ini_0ring_basedir})" unless e__is_a_dir?(@x_ini_0ring_basedir)
-  e__file_move("#{@x_supervision_new_cluster_basedir}/.0x1.ini.0ring.tar", "#{@x_ini_0ring_basedir}/")
+  abort "ERROR: can't access @x_ini_0ring_basedir (#{@x_ini_0ring_basedir})" unless x__is_a_dir?(@x_ini_0ring_basedir)
+  x__file_move("#{@x_supervision_new_cluster_basedir}/.0x1.ini.0ring.tar", "#{@x_ini_0ring_basedir}/")
   # downloading 0ring_ini_file
   x_0ring_uri = "https://raw.github.com/0xyl1s/0x1_supervision_templates/master/#{@os}/0rings/#{@cluster_type}/0ring.#{@x_0ring_current}"
-  e__http_download_and_save(x_0ring_uri, @x_ini_0ring_basedir)
+  x__http_download_and_save(x_0ring_uri, @x_ini_0ring_basedir)
   x_0ring_ini_file = "#{@x_ini_0ring_basedir}/0ring.#{@x_0ring_current}"
-  abort "ERROR: x_0ring_ini file (#{x_0ring_ini_file}) can't be downloaded from #{x_0ring_uri}" unless e__is_a_file?(x_0ring_ini_file)
+  abort "ERROR: x_0ring_ini file (#{x_0ring_ini_file}) can't be downloaded from #{x_0ring_uri}" unless x__is_a_file?(x_0ring_ini_file)
   puts "dowloaded x_0ring_ini_file (#{x_0ring_ini_file}, from #{x_0ring_uri})"
 end
 
@@ -130,12 +130,12 @@ def initialize(os, cluster_type, x_0ring_version)
   super
   require @x_ini_0ring_data_filepath
   # TODO: x_log_prefix time is fixed...
-  @x_log_prefix = "<<<[0x1.0ring_ini #{X_MACHINE_HOSTNAME}.#{X_ENTITY_DOMAIN} #{e__datetime_sec}]>>>"
+  @x_log_prefix = "<<<[0x1.0ring_ini #{X_MACHINE_HOSTNAME}.#{X_ENTITY_DOMAIN} #{x__datetime_sec}]>>>"
   dispatch_ini_0ring_data
   abort "ERROR: provided os info (#{X_MACHINE_OS}) is not compatible with this install script (developped for #{@os})" unless @os == X_MACHINE_OS
   puts "XDEBUG: provided os info (#{X_MACHINE_OS}) is compatible with this install script (developped for #{@os})"
   certificates_create
-  e__file_save_nl(e__datetime_sec, "#{@x_ini_0ring_logsdir}/x.cluster_ini_0ring.#{@x_0ring_current}.phase2.done")
+  x__file_save_nl(x__datetime_sec, "#{@x_ini_0ring_logsdir}/x.cluster_ini_0ring.#{@x_0ring_current}.phase2.done")
   remote_execute
 end
 
@@ -218,12 +218,12 @@ def dispatch_ini_0ring_data()
 
     file_relative_path = x_0ring_data[:file_relative_path]
     file_full_path = File.join(@x_ini_0ring_basedir, file_relative_path)
-    abort "ERROR: can't access file #{file_full_path}" unless e__is_a_file?(file_full_path)
-    file_original_content = e__file_read(file_full_path)
+    abort "ERROR: can't access file #{file_full_path}" unless x__is_a_file?(file_full_path)
+    file_original_content = x__file_read(file_full_path)
     text_replace_regex = Regexp.new("#{dummy_text_replace.chomp}")
     new_content = file_original_content.gsub!(text_replace_regex, import_value)
-    e__file_overwrite(new_content, file_full_path)
-    file_new_content = e__file_read(file_full_path)
+    x__file_overwrite(new_content, file_full_path)
+    file_new_content = x__file_read(file_full_path)
   end
 
 end
@@ -238,14 +238,14 @@ end
 def remote_execute()
   xdebug = true
   x_sup_ssh_pubkey_dummy = "@@_0x1_sup_ssh_pubkey_@@"
-  ssh_command_initial_authorized_keys = e__content_replace(RAW_SSH_COMMAND_INITIAL_AUTHORIZED_KEYS, x_sup_ssh_pubkey_dummy, @xsup_ssh_pub_key)
+  ssh_command_initial_authorized_keys = x__content_replace(RAW_SSH_COMMAND_INITIAL_AUTHORIZED_KEYS, x_sup_ssh_pubkey_dummy, @xsup_ssh_pub_key)
   transfert_sup_ssh_pubkey_command = "echo \'#{ssh_command_initial_authorized_keys}\' | ssh -p#{X_MACHINE_TEMP_SSH_PORT} root@#{X_MACHINE_TEMP_IP} bash"
   puts transfert_sup_ssh_pubkey_command
   puts "#{@x_log_prefix} transfering Supervision user's ssh pubkey"
   abort "ERROR running #{transfert_sup_ssh_pubkey_command}" unless system transfert_sup_ssh_pubkey_command
   until @rsync_command_executed
     rsync_command = "rsync -avh --no-o --no-g --stats --progress --rsh='ssh -p#{X_MACHINE_TEMP_SSH_PORT}' #{@x_ini_0ring_basedir}/ root@#{X_MACHINE_TEMP_IP}:/root/#{@x_ini_0ring_dir}/"
-    if e__service_online?(X_MACHINE_TEMP_IP, X_MACHINE_TEMP_SSH_PORT)
+    if x__service_online?(X_MACHINE_TEMP_IP, X_MACHINE_TEMP_SSH_PORT)
       puts "#{@x_log_prefix} command: #{rsync_command}"
       @rsync_command_executed = true if system rsync_command
     else
@@ -257,7 +257,7 @@ def remote_execute()
   ssh_root_temp_command = "ssh -p#{X_MACHINE_TEMP_SSH_PORT} -o ConnectTimeout=15 root@#{X_MACHINE_TEMP_IP}"
   terminal_0ring_ini_ssh_root_phases_command = "urxvt -e #{ssh_root_temp_command} bash /root/#{@x_ini_0ring_dir}/0ring.#{@x_0ring_current} &"
   until @x_0ring_ini_ssh_root_phases_command_executed
-    if e__service_online?(X_MACHINE_TEMP_IP, X_MACHINE_TEMP_SSH_PORT)
+    if x__service_online?(X_MACHINE_TEMP_IP, X_MACHINE_TEMP_SSH_PORT)
       puts "#{@x_log_prefix} starting remote phase_system installation: \n#{terminal_0ring_ini_ssh_root_phases_command}\n\n"
       puts "#{@x_log_prefix} to follow the main live log, run: \n#{ssh_root_temp_command} tail -f '\~/.0x1.ini.0ring/logs/0x1.ini.system.0ring'\n\n"
       #test_command = "#{ssh_root_temp_command} ls -al /root \\; sleep 5"
@@ -275,7 +275,7 @@ def remote_execute()
   until defined? @remote_check_phase_system_done_0ring_checked
     break if defined? @remote_check_system_ready_checked
     puts "XDEBUG>>> defined? @remote_check_system_ready_checked => #{(defined? @remote_check_system_ready_checked).class}" if xdebug
-    if e__service_online?(X_MACHINE_TEMP_IP, X_MACHINE_TEMP_SSH_PORT)
+    if x__service_online?(X_MACHINE_TEMP_IP, X_MACHINE_TEMP_SSH_PORT)
       puts "#{@x_log_prefix}checking remote_check_phase_system_done_0ring_command"
       puts "#{remote_check_phase_system_done_0ring_command}" if xdebug
       remote_check_phase_system_done_0ring = %x"#{remote_check_phase_system_done_0ring_command}"
@@ -306,13 +306,13 @@ def remote_checking_system_ready(verbose=true)
   remote_check_system_ready_command = "#{ssh_mainuser_command} 'cat /home/#{X_MAINUSER_NAME}/.0x1.ini_user/0x1.ini.system.ready.0ring 2>/dev/null'"
   puts "#{@x_log_prefix} checking remote_check_system_ready_command" if verbose
   puts "#{remote_check_system_ready_command}" if verbose and xdebug
-  if e__service_online?(X_MACHINE_TEMP_IP, X_MACHINE_SSH_PORT) then
+  if x__service_online?(X_MACHINE_TEMP_IP, X_MACHINE_SSH_PORT) then
     remote_check_system_ready = %x"#{remote_check_system_ready_command}"
     if remote_check_system_ready == 'ready'
       @remote_check_system_ready_checked = true
     end
   else
-    unless e__service_online?(X_MACHINE_TEMP_IP, X_MACHINE_TEMP_SSH_PORT)
+    unless x__service_online?(X_MACHINE_TEMP_IP, X_MACHINE_TEMP_SSH_PORT)
       puts "#{@x_log_prefix} checking ip/port #{X_MACHINE_TEMP_IP}/#{X_MACHINE_SSH_PORT}: UNAVAILABLE" if verbose
     end
   end
