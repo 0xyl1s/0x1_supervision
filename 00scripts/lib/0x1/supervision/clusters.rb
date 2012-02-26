@@ -49,7 +49,7 @@ XHEREDOC
 # TODO: merge phases 1 and 2 classes into main ClusterIni class
 class ClusterIni
 def initialize(os, cluster_type, x_0ring_version)
-  x__load_modules([:standard, :onlline])
+  x__load_modules([:standard, :online])
   @os = os
   abort "ERROR: invalid cluster_type (#{cluster_type}" unless valid_os?(os)
   @cluster_type = cluster_type if valid_cluster_type?(cluster_type)
