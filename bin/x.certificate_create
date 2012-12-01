@@ -3,7 +3,7 @@
 # tested with ruby 1.9.3
 
 module X module Supervision module Security
-require_relative '../lib/0x1/supervision/certificates.rb'
+require_relative '../lib/0x1_supervision/certificates.rb'
 
 USAGE = <<-heredoc
 \n============================================================

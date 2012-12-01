@@ -3,7 +3,7 @@
 # tested with ruby 1.9.3
 
 module X module Supervision module Clusters
-require_relative "../lib/0x1/supervision/clusters.rb"
+require_relative "../lib/0x1_supervision/clusters.rb"
 
 # TODO: usage writing completion
 USAGE = <<-heredoc

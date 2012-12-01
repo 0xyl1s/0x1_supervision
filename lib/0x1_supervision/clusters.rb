@@ -2,7 +2,7 @@
 # tested with ruby 1.9.3
 
 module X module Supervision module Clusters
-  require_relative '../0x1_lib.helper.rb'
+  require_relative '0x1_lib.helper.rb'
 
   OSES = [
     'ub10.04_x86_64',

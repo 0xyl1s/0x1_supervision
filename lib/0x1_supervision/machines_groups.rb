@@ -2,7 +2,7 @@
 # tested with ruby 1.9.2
 
 module X module Admins module Utils module Machines
-require_relative '../0x1_lib.helper.rb'
+require_relative '0x1_lib.helper.rb'
 
 class Groups
 def initialize()
